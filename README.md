@@ -1,4 +1,4 @@
-#lhttp
+#lhttp http long live server with websocket
 ###discribe
 lhttp is a http like protocol but using websocket provide long live
 ###protocol
