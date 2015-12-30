@@ -41,7 +41,7 @@ func (p *ChatProcessor)OnMessage(h *WsHandler) {
 ```
 ###start websocket server
 ```go
-http.Handler("/echo?connid=*",lhttp.Handler(lhttp.StartServer))
+http.Handler("/echo",lhttp.Handler(lhttp.StartServer))
 http.ListenAndServe(":8081")
 ```
 ### example ,echo
