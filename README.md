@@ -25,17 +25,40 @@ time:1990-1210 5:30:48
 1. define your processor,you need combine ```BaseProcessor```
 ```go
 type ChatProcessor struct {
-    BaseProcessor
+    *lhttp.BaseProcessor
 }
 ```
 2. regist your processor
 ```go
-Regist('chat',&ChatProcessor{})
+lhttp.Regist("chat",&ChatProcessor{&lhttp.BaseProcessor{}})
 ```
 then if command is 'chat' ChatProcessor will handle it 
-3.define your onmessage handle
+3. define your onmessage handle
 ```go
-func (p *ChatProcessor)onMessage(h *WsHandler) {
-    h.Send(h.GETbody())
+func (p *ChatProcessor)OnMessage(h *WsHandler) {
+    h.Send(h.GetBody())
+}
+```
+###start websocket server
+```go
+http.Handler("/echo?connid=*",lhttp.Handler(lhttp.StartServer))
+http.ListenAndServe(":8081")
+```
+### example ,echo
+```go
+type ChatProcessor struct {
+    *lhttp.BaseProcessor
+}
+
+func (p *ChatProcessor) OnMessage (h *lhttp.WsHandler) {
+    log.Print("on message :", h.GetBody())
+    h.Send(h.GetBody())
+}
+
+func main(){
+    lhttp.Regist("chat", &ChatProcessor{&lhttp.BaseProcessor{}})
+
+    http.Handle("/echo",lhttp.Handler(lhttp.StartServer))
+    http.ListenAndServe(":8081",nil)
 }
 ```

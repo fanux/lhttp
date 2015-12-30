@@ -96,9 +96,11 @@ type Handler func(*Conn)
 
 func checkOrigin(config *Config, req *http.Request) (err error) {
 	config.Origin, err = Origin(config, req)
-	if err == nil && config.Origin == nil {
-		return fmt.Errorf("null origin")
-	}
+	/*
+		if err == nil && config.Origin == nil {
+			return fmt.Errorf("null origin")
+		}
+	*/
 	return err
 }
 

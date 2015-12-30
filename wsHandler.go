@@ -1,27 +1,79 @@
 package lhttp
 
-type WsResponse struct {
-	command string
-	headers map[string]string
-	body    string
+import (
+	"log"
+	"strings"
+)
 
-	req *WsHandler
+var (
+	connID = "connid"
+	sign   = "sign"
+	//headers max num not size
+	headerMax = 20
+)
+
+type WsMessage struct {
+	//message raw data
+	message []byte
+
+	//message command type
+	command string
+	//message headers
+	headers map[string]string
+	//message body
+	body string
 }
 
-//response to client
-func (rep *WsResponse) response() {
+//parse websocket body
+func buildMessage(data []byte) *WsMessage {
+	s := string(data)
+	message := &WsMessage{message: data}
+	message.headers = make(map[string]string, headerMax)
+	//parse message
+
+	//parse start line
+	i := strings.Index(s, "\r\n")
+	message.command = s[:i]
+
+	//parse hearders
+	k := 0
+	headers := s[i+2:]
+	var key string
+	var value string
+	//traverse once
+	for j, ch := range headers {
+		if ch == ':' {
+			key = headers[k:j]
+			k = j + 1
+		} else if headers[j:j+2] == "\r\n" {
+			value = headers[k:j]
+			k = j + 2
+
+			message.headers[key] = value
+		}
+		if headers[k:k+2] == "\r\n" {
+			k += 2
+			break
+		}
+	}
+
+	//set body
+	message.body = headers[k:]
+
+	return message
 }
 
 type WsHandler struct {
 	callbacks HandlerCallbacks
 
-	//TODO change real websocket connection
-	conn string
+	//websocket connection
+	conn *Conn
+
+	//receive message
+	message *WsMessage
 
 	//one connection set id map sevel connections
 	connSetID string
-
-	resp *WsResponse
 }
 
 func (req *WsHandler) SetCommand(s string) {
@@ -32,26 +84,90 @@ func (req *WsHandler) GetCommand() string {
 func (req *WsHandler) GetHeader(hkey string) string {
 	return ""
 }
+
+//if header already exist,update it
 func (req *WsHandler) AddHeader(hkey, hvalue string) {
 }
 func (req *WsHandler) GetBody() string {
-	return ""
+	return req.message.body
 }
-func (req *WsHandler) Send(string) {
+
+//if you want change command or header ,using SetCommand or AddHeader
+func (req *WsHandler) Send(body string) {
+	resp := req.message.command + "\r\n"
+
+	for k, v := range req.message.headers {
+		resp = resp + k + ":" + v + "\r\n"
+	}
+	resp += "\r\n" + body
+
+	req.message.message = []byte(resp)
+
+	//log.Print("send message:", string(req.message.message))
+
+	Message.Send(req.conn, req.message.message)
 }
 
 type HandlerCallbacks interface {
-	onOpen(*WsHandler)
-	onClose(*WsHandler)
-	onMessage(*WsHandler)
+	OnOpen(*WsHandler)
+	OnClose(*WsHandler)
+	OnMessage(*WsHandler)
 }
 
 type BaseProcessor struct {
 }
 
-func (*BaseProcessor) onOpen(*WsHandler) {
+func (*BaseProcessor) OnOpen(*WsHandler) {
+	log.Print("base on open")
 }
-func (*BaseProcessor) onClose(*WsHandler) {
+func (*BaseProcessor) OnMessage(*WsHandler) {
+	log.Print("base on message")
 }
-func (*BaseProcessor) onMessage(*WsHandler) {
+func (*BaseProcessor) OnClose(*WsHandler) {
+	log.Print("base on close")
+}
+
+func StartServer(ws *Conn) {
+	//log.Print("start serve")
+	openFlag := 0
+
+	//init WsHandler,set connection and connsetid
+	//TODO auth
+	id := "123"
+	wsHandler := &WsHandler{conn: ws, connSetID: id}
+
+	for {
+		var data []byte
+		err := Message.Receive(ws, &data)
+		//log.Print("receive message:", string(data))
+		if err != nil {
+			break
+		}
+		wsHandler.message = buildMessage(data)
+
+		wsHandler.callbacks = getProcessor(wsHandler.message.command)
+		//log.Print("callbacks:", wsHandler.callbacks.OnMessage)
+		//just call once
+		if openFlag == 0 {
+			if wsHandler.callbacks.OnOpen != nil {
+				wsHandler.callbacks.OnOpen(wsHandler)
+			} else {
+				//log.Print("error on open is null")
+			}
+			openFlag = 1
+		}
+		if wsHandler.callbacks.OnMessage != nil {
+			wsHandler.callbacks.OnMessage(wsHandler)
+		} else {
+			//log.Print("error onmessage is null ")
+		}
+	}
+	defer func() {
+		if wsHandler.callbacks.OnClose != nil {
+			wsHandler.callbacks.OnClose(wsHandler)
+		} else {
+			//log.Print("error on close is null")
+		}
+		ws.Close()
+	}()
 }
