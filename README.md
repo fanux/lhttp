@@ -65,11 +65,13 @@ func main(){
 ###test
 open  websocketServer and run:
 ```bash
+cd websocketServer
 go run test.go
 ```
 as you can see ,server add new header and set new command, if server not change headers or command,
 response headers and command will same as request
 open an other bash ,and run client in websocketClient
 ```bash
+cd websocketClient
 go run test.go
 ```
