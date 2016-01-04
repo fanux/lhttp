@@ -72,40 +72,60 @@ type WsHandler struct {
 	//receive message
 	message *WsMessage
 
+	resp WsMessage
+
 	//one connection set id map sevel connections
 	connSetID string
 }
 
 func (req *WsHandler) SetCommand(s string) {
+	req.resp.command = s
 }
+
 func (req *WsHandler) GetCommand() string {
-	return ""
+	return req.message.command
 }
 func (req *WsHandler) GetHeader(hkey string) string {
-	return ""
+	return req.message.headers[hkey]
 }
 
 //if header already exist,update it
 func (req *WsHandler) AddHeader(hkey, hvalue string) {
+	req.resp.headers = make(map[string]string, headerMax)
+	req.resp.headers[hkey] = hvalue
 }
+
 func (req *WsHandler) GetBody() string {
 	return req.message.body
 }
 
 //if you want change command or header ,using SetCommand or AddHeader
 func (req *WsHandler) Send(body string) {
-	resp := req.message.command + "\r\n"
+	var resp string
+	if req.resp.command != "" {
+		resp = req.resp.command + "\r\n"
+	} else {
+		resp = req.message.command + "\r\n"
+	}
 
-	for k, v := range req.message.headers {
-		resp = resp + k + ":" + v + "\r\n"
+	if req.resp.headers != nil {
+		for k, v := range req.resp.headers {
+			resp = resp + k + ":" + v + "\r\n"
+		}
+	} else {
+		for k, v := range req.message.headers {
+			resp = resp + k + ":" + v + "\r\n"
+		}
 	}
 	resp += "\r\n" + body
 
-	req.message.message = []byte(resp)
+	req.resp.message = []byte(resp)
 
 	//log.Print("send message:", string(req.message.message))
 
-	Message.Send(req.conn, req.message.message)
+	Message.Send(req.conn, req.resp.message)
+
+	req.resp = WsMessage{command: "", headers: nil}
 }
 
 type HandlerCallbacks interface {
