@@ -62,3 +62,14 @@ func main(){
     http.ListenAndServe(":8081",nil)
 }
 ```
+###test
+open  websocketServer and run:
+```bash
+go run test.go
+```
+as you can see ,server add new header and set new command, if server not change headers or command,
+response headers and command will same as request
+open an other bash ,and run client in websocketClient
+```bash
+go run test.go
+```
