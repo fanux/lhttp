@@ -9,7 +9,11 @@ var (
 	connID = "connid"
 	sign   = "sign"
 	//headers max num not size
-	headerMax = 20
+	headerMax               = 20
+	version                 = "1.0"
+	protocolName            = "LHTTP"
+	protocolNameWithVersion = "LHTTP/1.0"
+	protocolLength          = 9
 )
 
 type WsMessage struct {
@@ -33,7 +37,7 @@ func buildMessage(data []byte) *WsMessage {
 
 	//parse start line
 	i := strings.Index(s, "\r\n")
-	message.command = s[:i]
+	message.command = s[protocolLength+1 : i]
 
 	//parse hearders
 	k := 0
@@ -101,11 +105,11 @@ func (req *WsHandler) GetBody() string {
 
 //if you want change command or header ,using SetCommand or AddHeader
 func (req *WsHandler) Send(body string) {
-	var resp string
+	resp := "LHTTP/1.0 "
 	if req.resp.command != "" {
-		resp = req.resp.command + "\r\n"
+		resp = resp + req.resp.command + "\r\n"
 	} else {
-		resp = req.message.command + "\r\n"
+		resp = resp + req.message.command + "\r\n"
 	}
 
 	if req.resp.headers != nil {
@@ -158,11 +162,26 @@ func StartServer(ws *Conn) {
 
 	for {
 		var data []byte
+		var dataStr string
 		err := Message.Receive(ws, &data)
 		//log.Print("receive message:", string(data))
 		if err != nil {
 			break
 		}
+
+		dataStr = string(data)
+		if len(dataStr) <= protocolLength {
+			//TODO how to provide other protocol
+			log.Print("TODO provide other protocol")
+			continue
+		}
+
+		if dataStr[:protocolLength] != protocolNameWithVersion {
+			//TODO how to provide other protocol
+			log.Print("TODO provide other protocol")
+			continue
+		}
+
 		wsHandler.message = buildMessage(data)
 
 		wsHandler.callbacks = getProcessor(wsHandler.message.command)

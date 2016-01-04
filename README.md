@@ -3,7 +3,7 @@
 lhttp is a http like protocol but using websocket provide long live
 ###protocol
 ```go
-Command\r\n                          --------start line,define command
+LHTTP/1.0 Command\r\n                --------start line,define command,and protocol [protocol/version] [command]\r\n
 Header1:value\r\n                    --------headers
 Header2:value\r\n
 \r\n
@@ -11,7 +11,7 @@ body                                 --------message body
 ```
 for example:
 ```go
-chat\r\n
+LHTTP/1.0 chat\r\n
 content-type:json\r\n
 to:jack\r\n
 from:mike\r\n
@@ -30,7 +30,7 @@ type ChatProcessor struct {
 ```
 if you dont like ```BaseProcessor```,define your struct witch must has ```OnOpen(*WsHandler)``` 
 ```OnClose(*WsHandler)``` method
-like this:
+like this:(dont recommand)
 ```go
 type ChatProcessor struct {
 }
