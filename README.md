@@ -115,3 +115,55 @@ body optional
 ```
 client2 publish a message by channelID, client1 subscribe it,so client 1 will receive the message.
 if client1 send unsubscribe channelID,he will not recevie message any more in channelID
+
+###Upstream
+we can use lhttp as a proxy:
+```go
+LHTTP/1.0 command\r\n
+upstream:post http://www.xxx.com\r\n
+\r\n
+body
+```
+lhttp will use hole message as http body,post to http://www.xxx.com
+if method is get,lhttp act message as an argument and send http get request:
+MESSAGE:=
+```go
+LHTTP/1.0 command\r\n
+upstream:get http://www.xxx.com\r\n
+\r\n
+body
+```
+will send http://www.xxx.com?lhttp=MESSAGE
+
+####this case will show you about upstream proxy:
+jack use lhttp chat with mike, lhttp is third part module,we cant modify lhttp server but
+we want save the chat record, how can we do?
+
+```
+        jack                    mike
+         |__________    __________|
+                    |  |
+                    lhttp
+                      |(http request with chat record)
+                     http  (http://www.xxx.com/record)
+                     (save chat record)
+    
+```
+jack:
+MESSAGE_UPSTREAM:=
+```go
+LHTTP1.0 chat\r\n
+upstream:post http://www.xxx.com/record\r\n
+publish:channel_mike\r\n
+\r\n
+hello mike,I am jack
+```
+mike:
+```go
+LHTTP1.0 chat\r\n
+subscribe:channel_mike\r\n
+\r\n
+```
+when jack send publish message,not only mike will receive the message,the http server will
+also receive it. witch http body is:```MESSAGE_UPSTREAM```,so http serve can do anything about
+message include save the record
