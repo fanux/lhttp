@@ -28,6 +28,22 @@ type ChatProcessor struct {
     *lhttp.BaseProcessor
 }
 ```
+if you dont like ```BaseProcessor```,define your struct witch must has ```OnOpen(*WsHandler)``` 
+```OnClose(*WsHandler)``` method
+like this:
+```go
+type ChatProcessor struct {
+}
+func (p ChatProcessor)OnOpen(h *WsHandler) {
+    //your logic
+}
+func (p ChatProcessor)OnClose(h *WsHandler) {
+    //your logic
+}
+func (p ChatProcessor)OnMessage(h *WsHandler) {
+    //your logic
+}
+```
 2. regist your processor
 ```go
 lhttp.Regist("chat",&ChatProcessor{&lhttp.BaseProcessor{}})
