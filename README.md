@@ -91,3 +91,27 @@ open an other bash ,and run client in websocketClient
 cd websocketClient
 go run test.go
 ```
+###Subscribe/Publish
+client1:
+```go
+LHTTP/1.0 command\r\n
+subscribe:channelID\r\n
+\r\n
+body optional
+```
+client2:
+```go
+LHTTP/1.0 command\r\n
+publish:channelID\r\n
+\r\n
+body require
+```
+client1:
+```go
+LHTTP/1.0 command\r\n
+unsubscribe:channelID\r\n
+\r\n
+body optional
+```
+client2 publish a message by channelID, client1 subscribe it,so client 1 will receive the message.
+if client1 send unsubscribe channelID,he will not recevie message any more in channelID
