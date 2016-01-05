@@ -30,6 +30,7 @@ type WsMessage struct {
 
 //parse websocket body
 func buildMessage(data []byte) *WsMessage {
+	//TODO optimise ,to use builder pattern
 	s := string(data)
 	message := &WsMessage{message: data}
 	message.headers = make(map[string]string, headerMax)
@@ -90,7 +91,11 @@ func (req *WsHandler) GetCommand() string {
 	return req.message.command
 }
 func (req *WsHandler) GetHeader(hkey string) string {
-	return req.message.headers[hkey]
+	if value, ok := req.message.headers[hkey]; ok {
+		return value
+	} else {
+		return ""
+	}
 }
 
 //if header already exist,update it
@@ -151,8 +156,13 @@ func (*BaseProcessor) OnClose(*WsHandler) {
 	log.Print("base on close")
 }
 
+func registAllHeadFilter() {
+	RegistHeadFilter(MQ_PRIORITY, &mqHeadFilter{})
+}
+
 func StartServer(ws *Conn) {
-	//log.Print("start serve")
+	registAllHeadFilter()
+
 	openFlag := 0
 
 	//init WsHandler,set connection and connsetid
@@ -184,6 +194,13 @@ func StartServer(ws *Conn) {
 
 		wsHandler.message = buildMessage(data)
 
+		//head filter before process message
+		for _, h := range headFilterHandler[:PRIORITY_BEFORE_REQUEST] {
+			if h != nil {
+				h.HeaderFilter(wsHandler)
+			}
+		}
+
 		wsHandler.callbacks = getProcessor(wsHandler.message.command)
 		//log.Print("callbacks:", wsHandler.callbacks.OnMessage)
 		//just call once
@@ -199,6 +216,13 @@ func StartServer(ws *Conn) {
 			wsHandler.callbacks.OnMessage(wsHandler)
 		} else {
 			//log.Print("error onmessage is null ")
+		}
+
+		//head filter after process message
+		for _, h := range headFilterHandler[PRIORITY_BEFORE_REQUEST:] {
+			if h != nil {
+				h.HeaderFilter(wsHandler)
+			}
 		}
 	}
 	defer func() {

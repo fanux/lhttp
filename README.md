@@ -116,6 +116,13 @@ body optional
 client2 publish a message by channelID, client1 subscribe it,so client 1 will receive the message.
 if client1 send unsubscribe channelID,he will not recevie message any more in channelID
 
+support multiple channelID:
+```go
+LHTTP1.0 chat\r\n
+subscribe:channelID1 channelID2 channelID3\r\n
+\r\n
+```
+
 ###Upstream
 we can use lhttp as a proxy:
 ```go
@@ -175,3 +182,24 @@ subscribe:channel_mike\r\n
 when jack send publish message,not only mike will receive the message,the http server will
 also receive it. witch http body is:```MESSAGE_UPSTREAM```,so http serve can do anything about
 message include save the record
+
+###Multipart form data
+forexample a file upload message,the multipart header record the offset of each data part
+```go
+LHTTP1.0 upload\r\n
+multipart:0 54\r\n
+\r\n
+content-type:text/json\r\n
+{filename:file.txt,fileLen:5}
+content-type:text/plain\r\n
+hello
+```
+```go
+content-type:text/json\r\n{filename:file.txt,fileLen:5}content-type:text/plain\r\nhello
+^                                                      ^
+|<-------------------first part----------------------->|<---------second part---------|
+0                                                      54                           
+```
+why not boundary but use offset? if use boundary lhttp need ergodic hole message,that behaviour 
+is poor efficiency. instead we use offset to cut message 
+
