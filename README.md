@@ -84,8 +84,8 @@ open  websocketServer and run:
 cd websocketServer
 go run test.go
 ```
-as you can see, server add new header and set new command, if server not change headers or command,
-response headers and command will be the same as request, 
+as you can see, server add new header and set new command, if server not change headers or command, 
+response headers and command will be the same as request,  
 open an other bash, and run client in websocketClient
 ```bash
 cd websocketClient
@@ -184,7 +184,7 @@ also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http serve can do
 message include save the record
 
 ###Multipart form data
-forexample a file upload message,the multipart header record the offset of each data part,
+forexample a file upload message, the multipart header record the offset of each data part, 
 each part can has it own headers
 ```go
 LHTTP1.0 upload\r\n
@@ -203,6 +203,6 @@ content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/pla
 |<---------------------first part------------------------->|<---------second part---------|
 0                                                         56                           
 ```
-why not boundary but use offset? if use boundary lhttp need ergodic hole message,that behaviour 
+why not boundary but use offset? if use boundary lhttp need ergodic hole message, that behaviour 
 is poor efficiency. instead we use offset to cut message 
 
