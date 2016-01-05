@@ -185,20 +185,23 @@ message include save the record
 
 ###Multipart form data
 forexample a file upload message,the multipart header record the offset of each data part
+each part can has it own headers
 ```go
 LHTTP1.0 upload\r\n
-multipart:0 54\r\n
+multipart:0 56\r\n
 \r\n
 content-type:text/json\r\n
+\r\n
 {filename:file.txt,fileLen:5}
 content-type:text/plain\r\n
+\r\n
 hello
 ```
 ```go
-content-type:text/json\r\n{filename:file.txt,fileLen:5}content-type:text/plain\r\nhello
-^                                                      ^
-|<-------------------first part----------------------->|<---------second part---------|
-0                                                      54                           
+content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/plain\r\nhello
+^                                                          ^
+|<---------------------first part------------------------->|<---------second part---------|
+0                                                         56                           
 ```
 why not boundary but use offset? if use boundary lhttp need ergodic hole message,that behaviour 
 is poor efficiency. instead we use offset to cut message 
