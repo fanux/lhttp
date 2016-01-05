@@ -27,7 +27,7 @@ var (
 
 var (
 	//handle subscribe/publish/unsubscribe header
-	MQ_PRIORITY = 0
+	MQ_PRIORITY = 5
 )
 
 type HeadFilterHandle interface {
@@ -52,14 +52,21 @@ func (*mqHeadFilter) HeaderFilter(ws *WsHandler) {
 	var channels []string
 	if value = ws.GetHeader("subscribe"); value != "" {
 		channels = strings.Split(value, " ")
-		//TODO
-		_ = channels
+		for _, c := range channels {
+			mq.Subscribe(c, func(s string) {
+				Message.Send(ws.conn, s)
+			})
+		}
 	}
+
 	if value = ws.GetHeader("publish"); value != "" {
 		channels = strings.Split(value, " ")
-		//TODO
-		_ = channels
+		for _, c := range channels {
+			//TODO set response message
+			mq.Publish(c, ws.resp.message)
+		}
 	}
+
 	if value = ws.GetHeader("unsubscribe"); value != "" {
 		channels = strings.Split(value, " ")
 		//TODO
