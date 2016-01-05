@@ -1,9 +1,9 @@
 #lhttp http long live server with websocket
 ###discribe
-lhttp is a http like protocol but using websocket provide long live
+lhttp is a http like protocol using websocket to provide long live
 ###protocol
 ```go
-LHTTP/1.0 Command\r\n                --------start line,define command,and protocol [protocol/version] [command]\r\n
+LHTTP/1.0 Command\r\n                --------start line, define command, and protocol [protocol/version] [command]\r\n
 Header1:value\r\n                    --------headers
 Header2:value\r\n
 \r\n
@@ -22,15 +22,15 @@ time:1990-1210 5:30:48
 }
 ```
 ###usage
-1. define your processor,you need combine ```BaseProcessor```
+1. define your processor, you need combine ```BaseProcessor```
 ```go
 type ChatProcessor struct {
     *lhttp.BaseProcessor
 }
 ```
-if you dont like ```BaseProcessor```,define your struct witch must has ```OnOpen(*WsHandler)``` 
+if you don't like ```BaseProcessor```, define your struct witch must has ```OnOpen(*WsHandler)``` 
 ```OnClose(*WsHandler)``` method
-like this:(dont recommand)
+like this:(don't recommand)
 ```go
 type ChatProcessor struct {
 }
@@ -48,7 +48,7 @@ func (p ChatProcessor)OnMessage(h *WsHandler) {
 ```go
 lhttp.Regist("chat",&ChatProcessor{&lhttp.BaseProcessor{}})
 ```
-then if command is 'chat' ChatProcessor will handle it 
+then if command is "chat" ChatProcessor will handle it 
 3. define your onmessage handle
 ```go
 func (p *ChatProcessor)OnMessage(h *WsHandler) {
@@ -60,7 +60,7 @@ func (p *ChatProcessor)OnMessage(h *WsHandler) {
 http.Handler("/echo",lhttp.Handler(lhttp.StartServer))
 http.ListenAndServe(":8081")
 ```
-### example ,echo
+### example , echo
 ```go
 type ChatProcessor struct {
     *lhttp.BaseProcessor
@@ -84,9 +84,9 @@ open  websocketServer and run:
 cd websocketServer
 go run test.go
 ```
-as you can see ,server add new header and set new command, if server not change headers or command,
-response headers and command will same as request
-open an other bash ,and run client in websocketClient
+as you can see, server add new header and set new command, if server not change headers or command,
+response headers and command will be the same as request, 
+open an other bash, and run client in websocketClient
 ```bash
 cd websocketClient
 go run test.go
@@ -113,8 +113,8 @@ unsubscribe:channelID\r\n
 \r\n
 body optional
 ```
-client2 publish a message by channelID, client1 subscribe it,so client 1 will receive the message.
-if client1 send unsubscribe channelID,he will not recevie message any more in channelID
+client2 publish a message by channelID, client1 subscribe it, so client 1 will receive the message.
+if client1 send unsubscribe channelID, he will not recevie message any more in channelID
 
 support multiple channelID:
 ```go
@@ -131,8 +131,8 @@ upstream:post http://www.xxx.com\r\n
 \r\n
 body
 ```
-lhttp will use hole message as http body,post to http://www.xxx.com
-if method is get,lhttp act message as an argument and send http get request:
+lhttp will use hole message as http body, post to http://www.xxx.com
+if method is get, lhttp act message as an argument and send http get request:
 MESSAGE:=
 ```go
 LHTTP/1.0 command\r\n
@@ -143,7 +143,7 @@ body
 will send http://www.xxx.com?lhttp=MESSAGE
 
 ####this case will show you about upstream proxy:
-jack use lhttp chat with mike, lhttp is third part module,we cant modify lhttp server but
+jack use lhttp chat with mike, lhttp is third part module, we can't modify lhttp server but
 we want save the chat record, how can we do?
 
 ```
@@ -179,8 +179,8 @@ LHTTP1.0 chat\r\n
 subscribe:channel_mike\r\n
 \r\n
 ```
-when jack send publish message,not only mike will receive the message,the http server will
-also receive it. witch http body is:```MESSAGE_UPSTREAM```,so http serve can do anything about
+when jack send publish message, not only mike will receive the message, the http server will
+also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http serve can do anything about
 message include save the record
 
 ###Multipart form data
