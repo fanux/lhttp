@@ -140,13 +140,21 @@ jack use lhttp chat with mike, lhttp is third part module,we cant modify lhttp s
 we want save the chat record, how can we do?
 
 ```
-        jack                    mike
-         |__________    __________|
-                    |  |
-                    lhttp
-                      |(http request with chat record)
-                     http  (http://www.xxx.com/record)
-                     (save chat record)
+        +----+                  +----+
+        |jack|                  |mike|
+        +----+                  +----+
+         |_____________    _______|
+                       |  |
+                   +------------+
+                   |lhttp server|
+                   +------------+
+                         |(http request with chat record)
+                         |
+                         V
+                   +------------+
+                   | http server|  upstream server(http://www.xxx.com/record)
+                   +------------+
+                   (save chat record)
     
 ```
 jack:
