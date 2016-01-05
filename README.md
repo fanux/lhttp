@@ -84,8 +84,10 @@ open  websocketServer and run:
 cd websocketServer
 go run test.go
 ```
-as you can see, server add new header and set new command, if server not change headers or command, 
-response headers and command will be the same as request,  
+as we can see, both of the new header are added and new command are set by the server. 
+If we don't set a header or command ,then they will return the same result as they 
+requested. 
+
 open an other bash, and run client in websocketClient
 ```bash
 cd websocketClient
