@@ -200,10 +200,10 @@ content-type:text/plain\r\n
 hello
 ```
 ```go
-content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/plain\r\nhello
+content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/plain\r\n\r\nhello
 ^                                                          ^
-|<---------------------first part------------------------->|<---------second part---------|
-0                                                         56                           
+|<---------------------first part------------------------->|<---------second part------------>|
+0                                                          56                           
 ```
 why not boundary but use offset? if use boundary lhttp need ergodic hole message, that behaviour 
 is poor efficiency. instead we use offset to cut message 

@@ -18,7 +18,7 @@ var (
 
 type WsMessage struct {
 	//message raw data
-	message []byte
+	message string
 
 	//message command type
 	command string
@@ -28,10 +28,23 @@ type WsMessage struct {
 	body string
 }
 
+//fill message by command headers and body
+func (m *WsMessage) serializeMessage() string {
+	m.message = "LHTTP/1.0 "
+	m.message += m.command + "\r\n"
+
+	for k, v := range m.headers {
+		m.message += k + ":" + v + "\r\n"
+	}
+	m.message += "\r\n" + m.body
+
+	return m.message
+}
+
 //parse websocket body
-func buildMessage(data []byte) *WsMessage {
+func buildMessage(data string) *WsMessage {
 	//TODO optimise ,to use builder pattern
-	s := string(data)
+	s := data
 	message := &WsMessage{message: data}
 	message.headers = make(map[string]string, headerMax)
 	//parse message
@@ -83,6 +96,12 @@ type WsHandler struct {
 	connSetID string
 }
 
+func (req *WsHandler) subscribeCallback(s string) {
+	log.Println("===========", s)
+
+	Message.Send(req.conn, s)
+}
+
 func (req *WsHandler) SetCommand(s string) {
 	req.resp.command = s
 }
@@ -108,6 +127,19 @@ func (req *WsHandler) GetBody() string {
 	return req.message.body
 }
 
+//if response is nil, use request to fill it
+func (req *WsHandler) setResponse() {
+	if req.resp.command == "" {
+		req.resp.command = req.message.command
+	}
+	if req.resp.headers == nil {
+		req.resp.headers = req.message.headers
+	}
+	if req.resp.body == "" {
+		req.resp.body = req.message.body
+	}
+}
+
 //if you want change command or header ,using SetCommand or AddHeader
 func (req *WsHandler) Send(body string) {
 	resp := "LHTTP/1.0 "
@@ -128,13 +160,13 @@ func (req *WsHandler) Send(body string) {
 	}
 	resp += "\r\n" + body
 
-	req.resp.message = []byte(resp)
+	req.resp.message = resp
 
 	//log.Print("send message:", string(req.message.message))
 
 	Message.Send(req.conn, req.resp.message)
 
-	req.resp = WsMessage{command: "", headers: nil}
+	req.resp = WsMessage{command: "", headers: nil, body: ""}
 }
 
 type HandlerCallbacks interface {
@@ -166,27 +198,23 @@ func StartServer(ws *Conn) {
 	openFlag := 0
 
 	//init WsHandler,set connection and connsetid
-	//TODO auth
-	id := "123"
-	wsHandler := &WsHandler{conn: ws, connSetID: id}
+	wsHandler := &WsHandler{conn: ws}
 
 	for {
-		var data []byte
-		var dataStr string
+		var data string
 		err := Message.Receive(ws, &data)
 		//log.Print("receive message:", string(data))
 		if err != nil {
 			break
 		}
 
-		dataStr = string(data)
-		if len(dataStr) <= protocolLength {
+		if len(data) <= protocolLength {
 			//TODO how to provide other protocol
 			log.Print("TODO provide other protocol")
 			continue
 		}
 
-		if dataStr[:protocolLength] != protocolNameWithVersion {
+		if data[:protocolLength] != protocolNameWithVersion {
 			//TODO how to provide other protocol
 			log.Print("TODO provide other protocol")
 			continue

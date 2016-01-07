@@ -2,16 +2,52 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/url"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
 
 var addr = flag.String("addr", "121.199.9.187:8081", "http service address")
+
+var (
+	MESSAGE_CHAT = "LHTTP/1.0 chat\r\ncontent-type:json\r\ncontent-length:10\r\n\r\njsonbody"
+	MESSAGE_SUB  = "LHTTP/1.0 subpub\r\nsubscribe:channel_mike\r\n\r\n"
+	MESSAGE_PUB  = "LHTTP/1.0 subpub\r\npublish:channel_mike\r\n\r\nhello mike, I am jack"
+)
+
+func sendSubscribe(c *websocket.Conn) {
+	/*
+		fmt.Println("input your channels split by blank:")
+		in := make([]byte, 1024)
+		os.Stdin.Read(in)
+	*/
+	msg := "LHTTP/1.0 subpub\r\nsubscribe:mike" + "\r\n\r\n"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+}
+func sendUnsubscribe(c *websocket.Conn) {
+	/*
+		fmt.Println("input your channels split by blank:")
+		in := make([]byte, 1024)
+		os.Stdin.Read(in)
+	*/
+	msg := "LHTTP/1.0 subpub\r\nunsubscribe:mike" + "\r\n\r\n"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+}
+func sendPublish(c *websocket.Conn) {
+	/*
+		fmt.Println("input your channels split by blank:")
+		in := make([]byte, 1024)
+		os.Stdin.Read(in)
+	*/
+	msg := "LHTTP/1.0 subpub\r\npublish:mike" + "\r\n\r\nhello world"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+}
 
 func main() {
 	flag.Parse()
@@ -50,11 +86,25 @@ func main() {
 	for {
 		select {
 		case _ = <-ticker.C:
-			err := c.WriteMessage(websocket.TextMessage, []byte("LHTTP/1.0 chat\r\ncontent-type:json\r\ncontent-length:10\r\n\r\njsonbody"))
-			if err != nil {
-				log.Println("write:", err)
-				return
+			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_CHAT))
+			fmt.Println("input your commands: subscribe publish unsubscribe")
+			input := make([]byte, 1024)
+			os.Stdin.Read(input)
+			if strings.HasPrefix(string(input), "subscribe") {
+				sendSubscribe(c)
 			}
+			if strings.HasPrefix(string(input), "unsubscribe") {
+				sendUnsubscribe(c)
+			}
+			if strings.HasPrefix(string(input), "publish") {
+				sendPublish(c)
+			}
+			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_SUB))
+			//err2 := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_PUB))
+			//if err != nil || err2 != nil {
+			//	log.Println("write:", err)
+			//	return
+			//}
 		case <-interrupt:
 			log.Println("interrupt")
 			// To cleanly close a connection, a client should send a close

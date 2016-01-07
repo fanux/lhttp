@@ -17,8 +17,14 @@ func (p *ChatProcessor) OnMessage(h *lhttp.WsHandler) {
 	h.Send(h.GetBody())
 }
 
+type SubPubProcessor struct {
+	*lhttp.BaseProcessor
+}
+
 func main() {
 	lhttp.Regist("chat", &ChatProcessor{&lhttp.BaseProcessor{}})
+	lhttp.Regist("subpub", &SubPubProcessor{&lhttp.BaseProcessor{}})
+
 	http.Handle("/echo", lhttp.Handler(lhttp.StartServer))
 	http.ListenAndServe(":8081", nil)
 }

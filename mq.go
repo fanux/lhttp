@@ -20,8 +20,14 @@ func (mq *Mq) Subscribe(key string, v MqHandler) (*nats.Subscription, error) {
 	return mq.conn.Subscribe(key, v)
 }
 
-//why not unsubscribe a channel
+/*
 func (mq *Mq) Unsubscribe(sub *nats.Subscription) error {
+	return sub.Unsubscribe()
+}
+*/
+
+func (mq *Mq) Unsubscribe(channel string) error {
+	sub, _ := mq.Subscribe(channel, nil)
 	return sub.Unsubscribe()
 }
 

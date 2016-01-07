@@ -30,6 +30,12 @@ var (
 	MQ_PRIORITY = 5
 )
 
+var (
+	HEADER_KEY_PUBLISH     = "publish"
+	HEADER_KEY_SUBSCRIBE   = "subscribe"
+	HEADER_KEY_UNSUBSCRIBE = "unsubscribe"
+)
+
 type HeadFilterHandle interface {
 	HeaderFilter(*WsHandler)
 }
@@ -50,26 +56,30 @@ type mqHeadFilter struct {
 func (*mqHeadFilter) HeaderFilter(ws *WsHandler) {
 	var value string
 	var channels []string
-	if value = ws.GetHeader("subscribe"); value != "" {
+
+	if value = ws.GetHeader(HEADER_KEY_SUBSCRIBE); value != "" {
 		channels = strings.Split(value, " ")
 		for _, c := range channels {
-			mq.Subscribe(c, func(s string) {
-				Message.Send(ws.conn, s)
-			})
+			mq.Subscribe(c, ws.subscribeCallback)
+			log.Print("subscribe channel: ", c)
 		}
 	}
 
-	if value = ws.GetHeader("publish"); value != "" {
+	if value = ws.GetHeader(HEADER_KEY_PUBLISH); value != "" {
 		channels = strings.Split(value, " ")
 		for _, c := range channels {
-			//TODO set response message
+			ws.setResponse()
+			ws.resp.serializeMessage()
 			mq.Publish(c, ws.resp.message)
+
+			log.Print("publish channel: ", c, "message:", ws.resp.message)
 		}
 	}
 
-	if value = ws.GetHeader("unsubscribe"); value != "" {
+	if value = ws.GetHeader(HEADER_KEY_UNSUBSCRIBE); value != "" {
 		channels = strings.Split(value, " ")
-		//TODO
-		_ = channels
+		for _, c := range channels {
+			mq.Unsubscribe(c)
+		}
 	}
 }
