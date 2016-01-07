@@ -96,9 +96,8 @@ type WsHandler struct {
 	connSetID string
 }
 
+//define subscribe callback as a WsHandler method is very very very importent
 func (req *WsHandler) subscribeCallback(s string) {
-	log.Println("===========", s)
-
 	Message.Send(req.conn, s)
 }
 
