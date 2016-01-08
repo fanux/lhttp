@@ -1,6 +1,6 @@
 ###lhttp filter module develop
 ####define your filter, for example message queue filter: 
-message queue filter care about "publish subscribe unsubscribe" header.
+message queue filter care about "publish subscribe unsubscribe" headers.
 
 ```go
 //if client send message include subscribe/publish/unsubscribe header

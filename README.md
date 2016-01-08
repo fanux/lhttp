@@ -1,6 +1,35 @@
 #lhttp http long live server with websocket
 ###discribe
-lhttp is a http like protocol using websocket to provide long live
+lhttp is a http like protocol using websocket to provide long live, 
+bulid your IM service quickly scalable without XMPP! 
+
+####protocal stack:
+```go
++--------------------+
+|       lhttp        |
++--------------------+
+|     websocket      |
++--------------------+
+|        TCP         |
++--------------------+
+```
+
+####architecture
+```go
+        +---------------------------------------+
+        |    message center cluster (gnatsd)    |
+        +---------------------------------------+
+ ........|.................|...............|..................
+| +-------------+   +-------------+   +-------------+        | 
+| |lhttp server |   |lhttp server |   |lhttp server |   ...  |  lhttp server cluster
+| +-------------+   +-------------+   +-------------+        | 
+ .....|..........._____|  |___.............|  |_________......
+      |          |            |            |            |       <----using websocket link
+ +--------+  +--------+   +--------+   +--------+   +--------+   
+ | client |  | client |   | client |   | client |   | client |   
+ +--------+  +--------+   +--------+   +--------+   +--------+  
+```
+
 ###protocol
 ```go
 LHTTP/1.0 Command\r\n                --------start line, define command, and protocol [protocol/version] [command]\r\n
