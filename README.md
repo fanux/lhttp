@@ -3,6 +3,8 @@
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
 
+everything is customizable.
+
 ####protocal stack:
 ```go
 +--------------------+
@@ -149,7 +151,7 @@ if client1 send unsubscribe channelID, he will not recevie message any more in c
 
 support multiple channelID:
 ```go
-LHTTP1.0 chat\r\n
+LHTTP/1.0 chat\r\n
 subscribe:channelID1 channelID2 channelID3\r\n
 \r\n
 ```
@@ -187,7 +189,6 @@ we want save the chat record, how can we do?
                    |lhttp server|
                    +------------+
                          |(http request with chat record)
-                         |
                          V
                    +------------+
                    | http server|  upstream server(http://www.xxx.com/record)
@@ -198,7 +199,7 @@ we want save the chat record, how can we do?
 jack:
 MESSAGE_UPSTREAM:=
 ```go
-LHTTP1.0 chat\r\n
+LHTTP/1.0 chat\r\n
 upstream:post http://www.xxx.com/record\r\n
 publish:channel_mike\r\n
 \r\n
@@ -206,7 +207,7 @@ hello mike,I am jack
 ```
 mike:
 ```go
-LHTTP1.0 chat\r\n
+LHTTP/1.0 chat\r\n
 subscribe:channel_mike\r\n
 \r\n
 ```
@@ -218,7 +219,7 @@ message include save the record
 forexample a file upload message, the multipart header record the offset of each data part, 
 each part can has it own headers
 ```go
-LHTTP1.0 upload\r\n
+LHTTP/1.0 upload\r\n
 multipart:0 56\r\n
 \r\n
 content-type:text/json\r\n
