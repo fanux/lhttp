@@ -3,9 +3,9 @@
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
 
-everything is customizable.
+Everything is customizable.
 
-####protocal stack:
+####protocol stack:
 ```go
 +--------------------+
 |       lhttp        |
@@ -155,6 +155,18 @@ LHTTP/1.0 chat\r\n
 subscribe:channelID1 channelID2 channelID3\r\n
 \r\n
 ```
+####Using HTTP publish message! 
+lhttp support publish message by standard HTTP. 
+url: /publish . 
+method: POST . 
+body: use lhttp publish message as HTTP body.
+for example I wan't send a message to who subscribe channel_test by HTTP.
+```go
+    resp,err := http.POST("https://www.yourserver.com/publish", "text/plain",
+    "LHTTP/1.0 chat\r\npublish:channel_test\r\n\r\nhello channel_test guys!")
+```
+when lhttp server receive this message, will publish whole body to channel_test.
+
 
 ###Upstream
 we can use lhttp as a proxy:

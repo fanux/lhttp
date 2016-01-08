@@ -92,9 +92,12 @@ type WsHandler struct {
 
 	resp WsMessage
 
+	upstream *Upstream
 	//one connection set id map sevel connections
-	connSetID string
+	//connSetID string
 }
+
+//TODO upstream methods
 
 //define subscribe callback as a WsHandler method is very very very importent
 func (req *WsHandler) subscribeCallback(s string) {
@@ -189,6 +192,7 @@ func (*BaseProcessor) OnClose(*WsHandler) {
 
 func registAllHeadFilter() {
 	RegistHeadFilter(MQ_PRIORITY, &mqHeadFilter{})
+	RegistHeadFilter(UPSTREM_PRIORITY, &upstreamHeadFilter{})
 }
 
 func StartServer(ws *Conn) {
@@ -197,7 +201,7 @@ func StartServer(ws *Conn) {
 	openFlag := 0
 
 	//init WsHandler,set connection and connsetid
-	wsHandler := &WsHandler{conn: ws}
+	wsHandler := &WsHandler{conn: ws, upstream: &Upstream{}}
 
 	for {
 		var data string

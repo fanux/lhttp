@@ -27,7 +27,8 @@ var (
 
 var (
 	//handle subscribe/publish/unsubscribe header
-	MQ_PRIORITY = 5
+	MQ_PRIORITY      = 10
+	UPSTREM_PRIORITY = 11
 )
 
 var (
@@ -48,10 +49,46 @@ func RegistHeadFilter(priority int, h HeadFilterHandle) {
 	}
 }
 
+type Upstream struct {
+	//user could define own request, if dose flag will be set true,
+	//if not lhttp will act whole message as
+	//body(method is POST) or parama(method is GET)
+	flag    bool
+	method  string //GET POST etc.
+	headers map[string]string
+	parama  string //user=user&passwd=passord
+	body    string
+}
+
+func (u *Upstream) setMethod(method string) {
+	u.flag = true
+	u.method = method
+}
+
+func (u *Upstream) setHeader(key string, value string) {
+	u.flag = true
+	u.headers[key] = value
+}
+
+func (u *Upstream) setParamas(args ...string) {
+	u.flag = true
+	//TODO
+}
+
+func (u *Upstream) setBody(body string) {
+	u.flag = true
+	u.body = body
+}
+
+type upstreamHeadFilter struct{}
+
+func (*upstreamHeadFilter) HeaderFilter(ws *WsHandler) {
+	//TODO
+}
+
 //if client send message include subscribe/publish/unsubscribe header
 //this filter work,use nats as a message queue client
-type mqHeadFilter struct {
-}
+type mqHeadFilter struct{}
 
 func (*mqHeadFilter) HeaderFilter(ws *WsHandler) {
 	var value string
