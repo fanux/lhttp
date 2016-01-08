@@ -1,11 +1,11 @@
 #lhttp http long live server with websocket
-###discribe
+###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
 
 Everything is customizable.
 
-####protocol stack:
+####Protocol stack:
 ```go
 +--------------------+
 |       lhttp        |
@@ -16,7 +16,7 @@ Everything is customizable.
 +--------------------+
 ```
 
-####architecture
+####Architecture
 ```go
         +---------------------------------------+
         |    message center cluster (gnatsd)    |
@@ -32,7 +32,7 @@ Everything is customizable.
  +--------+  +--------+   +--------+   +--------+   +--------+  
 ```
 
-###protocol
+###Protocol
 ```go
 LHTTP/1.0 Command\r\n                --------start line, define command, and protocol [protocol/version] [command]\r\n
 Header1:value\r\n                    --------headers
@@ -44,15 +44,16 @@ for example:
 ```go
 LHTTP/1.0 chat\r\n
 content-type:json\r\n
-to:jack\r\n
-from:mike\r\n
+publish:channel_jack\r\n
 \r\n
 {
-message:hello jack,
-time:1990-1210 5:30:48
+    to:jack,
+    from:mike,
+    message:hello jack,
+    time:1990-1210 5:30:48
 }
 ```
-###usage
+###Usage
 1. define your processor, you need combine ```BaseProcessor```
 ```go
 type ChatProcessor struct {
@@ -86,12 +87,12 @@ func (p *ChatProcessor)OnMessage(h *WsHandler) {
     h.Send(h.GetBody())
 }
 ```
-###start websocket server
+###Start websocket server
 ```go
 http.Handler("/echo",lhttp.Handler(lhttp.StartServer))
 http.ListenAndServe(":8081")
 ```
-### example , echo
+### Example , echo
 ```go
 type ChatProcessor struct {
     *lhttp.BaseProcessor
@@ -109,7 +110,7 @@ func main(){
     http.ListenAndServe(":8081",nil)
 }
 ```
-###test
+###Test
 open  websocketServer and run:
 ```bash
 cd websocketServer
@@ -187,7 +188,7 @@ body
 ```
 will send http://www.xxx.com?lhttp=MESSAGE
 
-####this case will show you about upstream proxy:
+####This case will show you about upstream proxy:
 jack use lhttp chat with mike, lhttp is third part module, we can't modify lhttp server but
 we want save the chat record, how can we do?
 
