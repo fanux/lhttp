@@ -98,6 +98,22 @@ type WsHandler struct {
 }
 
 //TODO upstream methods
+func (ws *WsHandler) upstreamInit() {
+	if ws.upstream.url == "" {
+	}
+	if ws.upstream.method == "" {
+	}
+	if ws.upstream.headers == nil {
+	}
+	if ws.upstream.parama == "" {
+	}
+	if ws.upstream.body == "" {
+	}
+}
+
+func (ws *WsHandler) upstreamSend() {
+	//TODO
+}
 
 //define subscribe callback as a WsHandler method is very very very importent
 func (req *WsHandler) subscribeCallback(s string) {
@@ -201,7 +217,7 @@ func StartServer(ws *Conn) {
 	openFlag := 0
 
 	//init WsHandler,set connection and connsetid
-	wsHandler := &WsHandler{conn: ws, upstream: &Upstream{}}
+	wsHandler := &WsHandler{conn: ws, upstream: &Upstream{headers: make(map[string]string, headerMax)}}
 
 	for {
 		var data string

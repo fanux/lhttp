@@ -3,6 +3,7 @@ package lhttp
 
 import (
 	"log"
+	"net/url"
 	"strings"
 )
 
@@ -35,6 +36,7 @@ var (
 	HEADER_KEY_PUBLISH     = "publish"
 	HEADER_KEY_SUBSCRIBE   = "subscribe"
 	HEADER_KEY_UNSUBSCRIBE = "unsubscribe"
+	HEADER_KEY_UPSTREAM    = "upstream"
 )
 
 type HeadFilterHandle interface {
@@ -50,40 +52,50 @@ func RegistHeadFilter(priority int, h HeadFilterHandle) {
 }
 
 type Upstream struct {
-	//user could define own request, if dose flag will be set true,
-	//if not lhttp will act whole message as
-	//body(method is POST) or parama(method is GET)
-	flag    bool
+	url     string
 	method  string //GET POST etc.
 	headers map[string]string
 	parama  string //user=user&passwd=passord
 	body    string
 }
 
+func (u *Upstream) setUrl(url string) {
+	u.url = url
+}
+
 func (u *Upstream) setMethod(method string) {
-	u.flag = true
 	u.method = method
 }
 
 func (u *Upstream) setHeader(key string, value string) {
-	u.flag = true
 	u.headers[key] = value
 }
 
-func (u *Upstream) setParamas(args ...string) {
-	u.flag = true
-	//TODO
+func (u *Upstream) setParamas(args ...string) string {
+	v := url.Values{}
+	for i, _ := range args {
+		i++
+		v.Set(args[i-1], args[i])
+	}
+	u.parama = v.Encode()
+	log.Print("parame is: ", u.parama)
+
+	return u.parama
 }
 
 func (u *Upstream) setBody(body string) {
-	u.flag = true
 	u.body = body
 }
 
 type upstreamHeadFilter struct{}
 
 func (*upstreamHeadFilter) HeaderFilter(ws *WsHandler) {
-	//TODO
+	var value string
+	if value = ws.GetHeader(HEADER_KEY_UPSTREAM); value == "" {
+		return
+	}
+	ws.upstreamInit()
+	ws.upstreamSend()
 }
 
 //if client send message include subscribe/publish/unsubscribe header
