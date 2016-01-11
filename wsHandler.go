@@ -2,6 +2,7 @@ package lhttp
 
 import (
 	"log"
+	"net/url"
 	"strings"
 )
 
@@ -14,6 +15,11 @@ var (
 	protocolName            = "LHTTP"
 	protocolNameWithVersion = "LHTTP/1.0"
 	protocolLength          = 9
+)
+
+var (
+	UPSTREAM_HTTP_METHOD_GET  = "GET"
+	UPSTREAM_HTTP_METHOD_POST = "POST"
 )
 
 type WsMessage struct {
@@ -99,15 +105,30 @@ type WsHandler struct {
 
 //TODO upstream methods
 func (ws *WsHandler) upstreamInit() {
+	values := strings.Split(ws.GetHeader(HEADER_KEY_UPSTREAM), " ")
+
 	if ws.upstream.url == "" {
+		ws.upstream.url = values[1]
+		log.Print("upstream url : ", ws.upstream.url)
 	}
 	if ws.upstream.method == "" {
+		ws.upstream.method = values[0]
+		log.Print("upstream method : ", ws.upstream.method)
 	}
-	if ws.upstream.headers == nil {
-	}
+	//if ws.upstream.headers == nil {
+	//}
 	if ws.upstream.parama == "" {
+		if ws.upstream.method == UPSTREAM_HTTP_METHOD_GET {
+			v := url.Values{}
+			v.Set("lhttp", ws.message.message)
+			ws.upstream.parama = v.Encode()
+			log.Print("upstream paramas:", ws.upstream.parama)
+		}
 	}
 	if ws.upstream.body == "" {
+		if ws.upstream.method != UPSTREAM_HTTP_METHOD_GET {
+			ws.upstream.body = ws.message.message
+		}
 	}
 }
 

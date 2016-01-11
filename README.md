@@ -173,20 +173,19 @@ when lhttp server receive this message, will publish whole body to channel_test.
 we can use lhttp as a proxy:
 ```go
 LHTTP/1.0 command\r\n
-upstream:post http://www.xxx.com\r\n
+upstream:POST http://www.xxx.com\r\n
 \r\n
 body
 ```
 lhttp will use hole message as http body, post to http://www.xxx.com
-if method is get, lhttp act message as an argument and send http get request:
+if method is GET, lhttp  send http GET request **ignore lhttp message body**:
 MESSAGE:=
 ```go
 LHTTP/1.0 command\r\n
-upstream:get http://www.xxx.com\r\n
+upstream:GET http://www.xxx.com?user=user_a&age=26\r\n
 \r\n
 body
 ```
-will send http://www.xxx.com?lhttp=MESSAGE
 
 ####This case will show you about upstream proxy:
 jack use lhttp chat with mike, lhttp is third part module, we can't modify lhttp server but
@@ -213,7 +212,7 @@ jack:
 MESSAGE_UPSTREAM:=
 ```go
 LHTTP/1.0 chat\r\n
-upstream:post http://www.xxx.com/record\r\n
+upstream:POST http://www.xxx.com/record\r\n
 publish:channel_mike\r\n
 \r\n
 hello mike,I am jack
