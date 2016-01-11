@@ -1,25 +1,10 @@
 package lhttp
 
 import (
+	"container/list"
 	"log"
 	"net/url"
 	"strings"
-)
-
-var (
-	connID = "connid"
-	sign   = "sign"
-	//headers max num not size
-	headerMax               = 20
-	version                 = "1.0"
-	protocolName            = "LHTTP"
-	protocolNameWithVersion = "LHTTP/1.0"
-	protocolLength          = 9
-)
-
-var (
-	UPSTREAM_HTTP_METHOD_GET  = "GET"
-	UPSTREAM_HTTP_METHOD_POST = "POST"
 )
 
 type WsMessage struct {
@@ -66,7 +51,7 @@ func buildMessage(data string) *WsMessage {
 	var value string
 	//traverse once
 	for j, ch := range headers {
-		if ch == ':' {
+		if ch == ':' && key == "" {
 			key = headers[k:j]
 			k = j + 1
 		} else if headers[j:j+2] == "\r\n" {
@@ -74,6 +59,8 @@ func buildMessage(data string) *WsMessage {
 			k = j + 2
 
 			message.headers[key] = value
+			log.Print("parse head key:", key, " value:", value)
+			key = ""
 		}
 		if headers[k:k+2] == "\r\n" {
 			k += 2
@@ -98,38 +85,13 @@ type WsHandler struct {
 
 	resp WsMessage
 
-	upstream *Upstream
+	upstreamURL *url.URL
 	//one connection set id map sevel connections
 	//connSetID string
 }
 
-//TODO upstream methods
 func (ws *WsHandler) upstreamInit() {
-	values := strings.Split(ws.GetHeader(HEADER_KEY_UPSTREAM), " ")
-
-	if ws.upstream.url == "" {
-		ws.upstream.url = values[1]
-		log.Print("upstream url : ", ws.upstream.url)
-	}
-	if ws.upstream.method == "" {
-		ws.upstream.method = values[0]
-		log.Print("upstream method : ", ws.upstream.method)
-	}
-	//if ws.upstream.headers == nil {
-	//}
-	if ws.upstream.parama == "" {
-		if ws.upstream.method == UPSTREAM_HTTP_METHOD_GET {
-			v := url.Values{}
-			v.Set("lhttp", ws.message.message)
-			ws.upstream.parama = v.Encode()
-			log.Print("upstream paramas:", ws.upstream.parama)
-		}
-	}
-	if ws.upstream.body == "" {
-		if ws.upstream.method != UPSTREAM_HTTP_METHOD_GET {
-			ws.upstream.body = ws.message.message
-		}
-	}
+	//TODO
 }
 
 func (ws *WsHandler) upstreamSend() {
@@ -227,18 +189,11 @@ func (*BaseProcessor) OnClose(*WsHandler) {
 	log.Print("base on close")
 }
 
-func registAllHeadFilter() {
-	RegistHeadFilter(MQ_PRIORITY, &mqHeadFilter{})
-	RegistHeadFilter(UPSTREM_PRIORITY, &upstreamHeadFilter{})
-}
-
 func StartServer(ws *Conn) {
-	registAllHeadFilter()
-
 	openFlag := 0
 
 	//init WsHandler,set connection and connsetid
-	wsHandler := &WsHandler{conn: ws, upstream: &Upstream{headers: make(map[string]string, headerMax)}}
+	wsHandler := &WsHandler{conn: ws}
 
 	for {
 		var data string
@@ -262,17 +217,19 @@ func StartServer(ws *Conn) {
 
 		wsHandler.message = buildMessage(data)
 
+		var e *list.Element
 		//head filter before process message
-		for _, h := range headFilterHandler[:PRIORITY_BEFORE_REQUEST] {
-			if h != nil {
-				h.HeaderFilter(wsHandler)
-			}
+		for e = beforeRequestFilterList.Front(); e != nil; e = e.Next() {
+			e.Value.(HeadFilterHandler).BeforeRequestFilterHandle(wsHandler)
 		}
 
 		wsHandler.callbacks = getProcessor(wsHandler.message.command)
 		//log.Print("callbacks:", wsHandler.callbacks.OnMessage)
 		//just call once
 		if openFlag == 0 {
+			for e = onOpenFilterList.Front(); e != nil; e = e.Next() {
+				e.Value.(HeadFilterHandler).OnOpenFilterHandle(wsHandler)
+			}
 			if wsHandler.callbacks.OnOpen != nil {
 				wsHandler.callbacks.OnOpen(wsHandler)
 			} else {
@@ -287,14 +244,15 @@ func StartServer(ws *Conn) {
 		}
 
 		//head filter after process message
-		for _, h := range headFilterHandler[PRIORITY_BEFORE_REQUEST:] {
-			if h != nil {
-				h.HeaderFilter(wsHandler)
-			}
+		for e = afterRequestFilterList.Front(); e != nil; e = e.Next() {
+			e.Value.(HeadFilterHandler).AfterRequestFilterHandle(wsHandler)
 		}
 	}
 	defer func() {
 		if wsHandler.callbacks.OnClose != nil {
+			for e := onCloseFilterList.Front(); e != nil; e = e.Next() {
+				e.Value.(HeadFilterHandler).OnCloseFilterHandle(wsHandler)
+			}
 			wsHandler.callbacks.OnClose(wsHandler)
 		} else {
 			//log.Print("error on close is null")

@@ -49,6 +49,13 @@ func sendPublish(c *websocket.Conn) {
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
+func sendUpstream(c *websocket.Conn) {
+	msg := "LHTTP/1.0 upstream\r\nupstream:GET http://115.28.143.67:8080/v1/user/10000/reports?AlgID=1\r\n\r\n"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+	msg = "LHTTP/1.0 upstream\r\nupstream:POST http://115.28.143.67:8080/v1/camera/10000/alarms\r\n\r\n{}"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+}
+
 func main() {
 	flag.Parse()
 	log.SetFlags(0)
@@ -87,7 +94,7 @@ func main() {
 		select {
 		case _ = <-ticker.C:
 			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_CHAT))
-			fmt.Println("input your commands: subscribe publish unsubscribe")
+			fmt.Println("input your commands: subscribe publish unsubscribe upstream")
 			input := make([]byte, 1024)
 			os.Stdin.Read(input)
 			if strings.HasPrefix(string(input), "subscribe") {
@@ -98,6 +105,9 @@ func main() {
 			}
 			if strings.HasPrefix(string(input), "publish") {
 				sendPublish(c)
+			}
+			if strings.HasPrefix(string(input), "upstream") {
+				sendUpstream(c)
 			}
 			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_SUB))
 			//err2 := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_PUB))
