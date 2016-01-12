@@ -20,3 +20,7 @@ var (
 	UPSTREAM_HTTP_METHOD_GET  = "GET"
 	UPSTREAM_HTTP_METHOD_POST = "POST"
 )
+
+var (
+	ProcessorMax = 40
+)

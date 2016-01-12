@@ -4,7 +4,6 @@ type HandlerHub struct {
 }
 
 func (h *HandlerHub) Get(connSetID string) *WsHandler {
-	//TODO
 	return &WsHandler{}
 }
 func (h *HandlerHub) Add(connSetID string, w *WsHandler) {

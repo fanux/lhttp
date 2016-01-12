@@ -21,7 +21,7 @@ type WsMessage struct {
 
 //fill message by command headers and body
 func (m *WsMessage) serializeMessage() string {
-	m.message = "LHTTP/1.0 "
+	m.message = protocolNameWithVersion + " "
 	m.message += m.command + "\r\n"
 
 	for k, v := range m.headers {
@@ -90,14 +90,6 @@ type WsHandler struct {
 	//connSetID string
 }
 
-func (ws *WsHandler) upstreamInit() {
-	//TODO
-}
-
-func (ws *WsHandler) upstreamSend() {
-	//TODO
-}
-
 //define subscribe callback as a WsHandler method is very very very importent
 func (req *WsHandler) subscribeCallback(s string) {
 	Message.Send(req.conn, s)
@@ -143,7 +135,7 @@ func (req *WsHandler) setResponse() {
 
 //if you want change command or header ,using SetCommand or AddHeader
 func (req *WsHandler) Send(body string) {
-	resp := "LHTTP/1.0 "
+	resp := protocolNameWithVersion + " "
 	if req.resp.command != "" {
 		resp = resp + req.resp.command + "\r\n"
 	} else {

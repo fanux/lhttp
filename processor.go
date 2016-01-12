@@ -1,9 +1,5 @@
 package lhttp
 
-var (
-	ProcessorMax = 40
-)
-
 var processorMap map[string]HandlerCallbacks
 
 func Regist(command string, p HandlerCallbacks) {
