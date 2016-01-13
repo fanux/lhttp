@@ -227,7 +227,7 @@ when jack send publish message, not only mike will receive the message, the http
 also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http serve can do anything about
 message include save the record
 
-###Multipart form data
+###Multipart data
 forexample a file upload message, the multipart header record the offset of each data part, 
 each part can has it own headers
 ```go
@@ -249,4 +249,26 @@ content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/pla
 ```
 why not boundary but use offset? if use boundary lhttp need ergodic hole message, that behaviour 
 is poor efficiency. instead we use offset to cut message 
+
+####How to get multipart data
+for example this is client message.
+```go
+LHTTP/1.0 upload\r\nmultipart:0 14\r\n\r\nk1:v1\r\n\r\nbody1k2:v2\r\n\r\nbody2"
+```
+server code:
+```go
+type UploadProcessor struct {
+	*lhttp.BaseProcessor
+}
+
+func (*UploadProcessor) OnMessage(ws *lhttp.WsHandler) {
+	for m := ws.GetMultipart(); m != nil; m = m.GetNext() {
+		log.Print("multibody:", m.GetBody(), " headers:", m.GetHeaders())
+	}
+}
+
+//don't forget to tegist your command processor
+
+lhttp.Regist("upload", &UploadProcessor{&lhttp.BaseProcessor{}})
+```
 

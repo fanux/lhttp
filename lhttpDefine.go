@@ -5,6 +5,7 @@ var (
 	HEADER_KEY_SUBSCRIBE   = "subscribe"
 	HEADER_KEY_UNSUBSCRIBE = "unsubscribe"
 	HEADER_KEY_UPSTREAM    = "upstream"
+	HEADER_KEY_MULTIPART   = "multipart"
 )
 
 var (

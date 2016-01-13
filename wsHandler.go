@@ -88,6 +88,13 @@ type WsHandler struct {
 	upstreamURL *url.URL
 	//one connection set id map sevel connections
 	//connSetID string
+
+	//save multipars datas, it is a list
+	multiparts *multipartBlock
+}
+
+func (req *WsHandler) GetMultipart() *multipartBlock {
+	return req.multiparts
 }
 
 //define subscribe callback as a WsHandler method is very very very importent

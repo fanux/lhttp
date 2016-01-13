@@ -6,3 +6,6 @@
 ```go
 ```
 
+###lhttp cluster 
+####TODO every node need to provide an API to search witch ip and port client should connect.
+

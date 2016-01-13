@@ -56,6 +56,11 @@ func sendUpstream(c *websocket.Conn) {
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
+func sendMultipart(c *websocket.Conn) {
+	msg := "LHTTP/1.0 upload\r\nmultipart:0 14\r\n\r\nk1:v1\r\n\r\nbody1k2:v2\r\n\r\nbody2"
+	c.WriteMessage(websocket.TextMessage, []byte(msg))
+}
+
 func main() {
 	flag.Parse()
 	log.SetFlags(0)
@@ -94,7 +99,7 @@ func main() {
 		select {
 		case _ = <-ticker.C:
 			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_CHAT))
-			fmt.Println("input your commands: subscribe publish unsubscribe upstream")
+			fmt.Println("input your commands:multipart subscribe publish unsubscribe upstream")
 			input := make([]byte, 1024)
 			os.Stdin.Read(input)
 			if strings.HasPrefix(string(input), "subscribe") {
@@ -108,6 +113,9 @@ func main() {
 			}
 			if strings.HasPrefix(string(input), "upstream") {
 				sendUpstream(c)
+			}
+			if strings.HasPrefix(string(input), "multipart") {
+				sendMultipart(c)
 			}
 			//err := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_SUB))
 			//err2 := c.WriteMessage(websocket.TextMessage, []byte(MESSAGE_PUB))

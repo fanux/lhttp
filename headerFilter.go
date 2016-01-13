@@ -61,4 +61,5 @@ func init() {
 	RegistHeadFilter(&HeadFilterBase{})
 	RegistHeadFilter(&mqHeadFilter{})
 	RegistHeadFilter(&upstreamHeadFilter{})
+	RegistHeadFilter(&multipartFilter{})
 }
