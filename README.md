@@ -253,7 +253,7 @@ is poor efficiency. instead we use offset to cut message
 ####How to get multipart data
 for example this is client message.
 ```go
-LHTTP/1.0 upload\r\nmultipart:0 14\r\n\r\nk1:v1\r\n\r\nbody1k2:v2\r\n\r\nbody2"
+LHTTP/1.0 upload\r\nmultipart:0 14\r\n\r\nk1:v1\r\n\r\nbody1k2:v2\r\n\r\nbody2
 ```
 server code:
 ```go

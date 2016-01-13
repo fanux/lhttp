@@ -58,7 +58,7 @@ func initBlock(s string, m *multipartBlock) {
 		if ch == ':' && key == "" {
 			key = headers[k:j]
 			k = j + 1
-		} else if headers[j:j+2] == "\r\n" {
+		} else if headers[j:j+2] == CRLF {
 			value = headers[k:j]
 			k = j + 2
 
@@ -66,7 +66,7 @@ func initBlock(s string, m *multipartBlock) {
 			log.Print("parse block head key:", key, " block value:", value)
 			key = ""
 		}
-		if headers[k:k+2] == "\r\n" {
+		if headers[k:k+2] == CRLF {
 			k += 2
 			break
 		}

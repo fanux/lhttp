@@ -1,5 +1,7 @@
 package lhttp
 
+var CRLF = "\r\n"
+
 var (
 	HEADER_KEY_PUBLISH     = "publish"
 	HEADER_KEY_SUBSCRIBE   = "subscribe"

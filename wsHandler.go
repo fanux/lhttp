@@ -22,12 +22,12 @@ type WsMessage struct {
 //fill message by command headers and body
 func (m *WsMessage) serializeMessage() string {
 	m.message = protocolNameWithVersion + " "
-	m.message += m.command + "\r\n"
+	m.message += m.command + CRLF
 
 	for k, v := range m.headers {
-		m.message += k + ":" + v + "\r\n"
+		m.message += k + ":" + v + CRLF
 	}
-	m.message += "\r\n" + m.body
+	m.message += CRLF + m.body
 
 	return m.message
 }
@@ -41,7 +41,7 @@ func buildMessage(data string) *WsMessage {
 	//parse message
 
 	//parse start line
-	i := strings.Index(s, "\r\n")
+	i := strings.Index(s, CRLF)
 	message.command = s[protocolLength+1 : i]
 
 	//parse hearders
@@ -54,7 +54,7 @@ func buildMessage(data string) *WsMessage {
 		if ch == ':' && key == "" {
 			key = headers[k:j]
 			k = j + 1
-		} else if headers[j:j+2] == "\r\n" {
+		} else if headers[j:j+2] == CRLF {
 			value = headers[k:j]
 			k = j + 2
 
@@ -62,7 +62,7 @@ func buildMessage(data string) *WsMessage {
 			log.Print("parse head key:", key, " value:", value)
 			key = ""
 		}
-		if headers[k:k+2] == "\r\n" {
+		if headers[k:k+2] == CRLF {
 			k += 2
 			break
 		}
@@ -144,21 +144,21 @@ func (req *WsHandler) setResponse() {
 func (req *WsHandler) Send(body string) {
 	resp := protocolNameWithVersion + " "
 	if req.resp.command != "" {
-		resp = resp + req.resp.command + "\r\n"
+		resp = resp + req.resp.command + CRLF
 	} else {
-		resp = resp + req.message.command + "\r\n"
+		resp = resp + req.message.command + CRLF
 	}
 
 	if req.resp.headers != nil {
 		for k, v := range req.resp.headers {
-			resp = resp + k + ":" + v + "\r\n"
+			resp = resp + k + ":" + v + CRLF
 		}
 	} else {
 		for k, v := range req.message.headers {
-			resp = resp + k + ":" + v + "\r\n"
+			resp = resp + k + ":" + v + CRLF
 		}
 	}
-	resp += "\r\n" + body
+	resp += CRLF + body
 
 	req.resp.message = resp
 
