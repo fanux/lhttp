@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	"mine/Lhttp"
 	"net/http"
+
+	"github.com/fanux/lhttp"
 )
 
 type ChatProcessor struct {
