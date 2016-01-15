@@ -9,7 +9,12 @@ func Regist(command string, p HandlerCallbacks) {
 
 func getProcessor(command string) HandlerCallbacks {
 	//log.Print("get processor:", processorMap[command], " command:", command)
-	return processorMap[command]
+	p, ok := processorMap[command]
+	if ok {
+		return p
+	} else {
+		return nil
+	}
 }
 
 func init() {

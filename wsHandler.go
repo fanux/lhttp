@@ -223,20 +223,23 @@ func StartServer(ws *Conn) {
 		}
 
 		wsHandler.callbacks = getProcessor(wsHandler.message.command)
+		if wsHandler.callbacks == nil {
+			wsHandler.callbacks = &BaseProcessor{}
+		}
 		//log.Print("callbacks:", wsHandler.callbacks.OnMessage)
 		//just call once
 		if openFlag == 0 {
 			for e = onOpenFilterList.Front(); e != nil; e = e.Next() {
 				e.Value.(HeadFilterHandler).OnOpenFilterHandle(wsHandler)
 			}
-			if wsHandler.callbacks.OnOpen != nil {
+			if wsHandler.callbacks != nil {
 				wsHandler.callbacks.OnOpen(wsHandler)
 			} else {
 				//log.Print("error on open is null")
 			}
 			openFlag = 1
 		}
-		if wsHandler.callbacks.OnMessage != nil {
+		if wsHandler.callbacks != nil {
 			wsHandler.callbacks.OnMessage(wsHandler)
 		} else {
 			//log.Print("error onmessage is null ")
@@ -248,10 +251,10 @@ func StartServer(ws *Conn) {
 		}
 	}
 	defer func() {
-		if wsHandler.callbacks.OnClose != nil {
-			for e := onCloseFilterList.Front(); e != nil; e = e.Next() {
-				e.Value.(HeadFilterHandler).OnCloseFilterHandle(wsHandler)
-			}
+		for e := onCloseFilterList.Front(); e != nil; e = e.Next() {
+			e.Value.(HeadFilterHandler).OnCloseFilterHandle(wsHandler)
+		}
+		if wsHandler.callbacks != nil {
 			wsHandler.callbacks.OnClose(wsHandler)
 		} else {
 			//log.Print("error on close is null")

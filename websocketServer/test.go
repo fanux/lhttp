@@ -43,5 +43,6 @@ func main() {
 	lhttp.Regist("upload", &UploadProcessor{&lhttp.BaseProcessor{}})
 
 	http.Handle("/echo", lhttp.Handler(lhttp.StartServer))
+	http.Handle("/", lhttp.Handler(lhttp.StartServer))
 	http.ListenAndServe(":8081", nil)
 }

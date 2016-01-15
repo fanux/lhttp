@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", "121.199.9.187:8081", "http service address")
+var addr = flag.String("addr", "115.28.143.67:8081", "http service address")
 
 var (
 	MESSAGE_CHAT = "LHTTP/1.0 chat\r\ncontent-type:json\r\ncontent-length:10\r\n\r\njsonbody"
@@ -27,7 +27,7 @@ func sendSubscribe(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 subpub\r\nsubscribe:mike" + "\r\n\r\n"
+	msg := "LHTTP/1.0 suubpub\r\nsubscribe:camera_123" + "\r\n\r\n"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 func sendUnsubscribe(c *websocket.Conn) {
@@ -36,7 +36,7 @@ func sendUnsubscribe(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 subpub\r\nunsubscribe:mike" + "\r\n\r\n"
+	msg := "LHTTP/1.0 suubpub\r\nunsubscribe:camera_123" + "\r\n\r\n"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 func sendPublish(c *websocket.Conn) {
@@ -45,7 +45,7 @@ func sendPublish(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 subpub\r\npublish:mike" + "\r\n\r\nhello world"
+	msg := "LHTTP/1.0 suubpub\r\npublish:camera_123" + "\r\n\r\nhello world"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
