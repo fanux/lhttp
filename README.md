@@ -168,6 +168,15 @@ for example I wan't send a message to who subscribe channel_test by HTTP.
 ```
 when lhttp server receive this message, will publish whole body to channel_test.
 
+your can use ```Publish``` function in tools.go
+```go
+//func Publish(channelID []string, command string, header map[string]string, body string) (err error) {
+//}
+//send message to who subscribe mike.
+
+Publish("mike", "yourCommand", nil, "hello mike!")
+```
+
 
 ###Upstream
 we can use lhttp as a proxy:
