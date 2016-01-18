@@ -32,6 +32,23 @@ Everything is customizable.
  +--------+  +--------+   +--------+   +--------+   +--------+  
 ```
 
+###Quick start
+```bash
+go get github.com/nats-io/nats
+go get github.com/fanux/lhttp
+```
+We need run gnatsd first:
+```bash
+cd bin
+./gnatsd &
+./lhttpd 
+```
+Open anohter bash run lhttpClient, then input your command:
+```bash
+cd bin
+./lhttpClient
+```
+
 ###Protocol
 ```go
 LHTTP/1.0 Command\r\n                --------start line, define command, and protocol [protocol/version] [command]\r\n
