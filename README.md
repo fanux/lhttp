@@ -5,6 +5,13 @@ bulid your IM service quickly scalable without XMPP!
 
 Everything is customizable.
 
+###Features
+*   simple easy but powerful!
+*   fast, 10000 messages send using 0.04s(single-core CPU,1G memory).
+*   support cluster.
+*   easy to customize and expansion.
+*   work well with HTTP. So LHTTP can work with other language like php java python etc,.
+
 ####Protocol stack:
 ```go
 +--------------------+
@@ -32,7 +39,7 @@ Everything is customizable.
  +--------+  +--------+   +--------+   +--------+   +--------+  
 ```
 
-###Quick start
+####Quick start
 ```bash
 go get github.com/nats-io/nats
 go get github.com/fanux/lhttp
