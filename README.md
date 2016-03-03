@@ -1,4 +1,4 @@
-#lhttp http long live server with websocket
+#go websocket framework, build your IM server in 5 minute!
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
