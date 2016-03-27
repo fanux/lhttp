@@ -15,7 +15,7 @@ Everything is customizable.
 ### A simple [chat room demo](https://github.com/fanux/lhttp-web-demo)
 #####with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we complete a simple chat room within 40 lines code!!
 
-###SDKs if you want join us, contact me! My Email is fhtjob@hotmail.com
+###SDKs if you want to join us, contact me! My Email is fhtjob@hotmail.com
 #### [javascript SDK](https://github.com/fanux/lhttp-javascript-sdk) webapp or website.
 #### TODO [c SDK](https://github.com/fanux/lhttp-c-sdk) ARM application or some c/c++ application.
 #### TODO [swift SDK](https://github.com/fanux/lhttp-swift-sdk) ios app
