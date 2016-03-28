@@ -1,4 +1,4 @@
-#go websocket framework, build your IM server in 5 minute!
+#Go websocket framework, build your IM server in 5 minute!
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
@@ -13,7 +13,7 @@ Everything is customizable.
 *   work well with HTTP. So LHTTP can work with other language like php java python etc,.
 
 ### A simple [chat room demo](https://github.com/fanux/lhttp-web-demo)
-#####with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we complete a simple chat room within 40 lines code!!
+with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we complete a simple chat room within 40 lines code!!
 
 ###SDKs if you want to join us, contact me! My Email is fhtjob@hotmail.com
 *	[javascript SDK](https://github.com/fanux/lhttp-javascript-sdk) webapp or website.
