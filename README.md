@@ -1,4 +1,4 @@
-#Your star is my power!! :roket:
+#Your star is my power!! :rocket:
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
 bulid your IM service quickly scalable without XMPP! 
