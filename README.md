@@ -22,6 +22,8 @@ with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we co
 *	TODO [object-c SDK](https://github.com/fanux/lhttp-object-c-sdk) ios app
 *	TODO [java SDK](https://github.com/fanux/lhttp-java-sdk) andriod app or java application.
 
+###[Header filter development](https://github.com/fanux/lhttp/blob/master/doc/DEVELOP.md)
+
 ####Protocol stack:
 ```go
 +--------------------+
