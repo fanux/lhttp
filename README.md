@@ -18,9 +18,9 @@ with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we co
 ###SDKs if you want to join us, contact me! My Email is fhtjob@hotmail.com
 - [x] [javascript SDK](https://github.com/fanux/lhttp-javascript-sdk) webapp or website.
 - [ ] [c SDK](https://github.com/fanux/lhttp-c-sdk) ARM application or some c/c++ application.
-- [ ] TODO [swift SDK](https://github.com/fanux/lhttp-swift-sdk) ios app
-- [ ] TODO [object-c SDK](https://github.com/fanux/lhttp-object-c-sdk) ios app
-- [ ] TODO [java SDK](https://github.com/fanux/lhttp-java-sdk) andriod app or java application.
+- [ ] [swift SDK](https://github.com/fanux/lhttp-swift-sdk) ios app
+- [ ] [object-c SDK](https://github.com/fanux/lhttp-object-c-sdk) ios app
+- [ ] [java SDK](https://github.com/fanux/lhttp-java-sdk) andriod app or java application.
 
 ###[Header filter development](https://github.com/fanux/lhttp/blob/master/doc/DEVELOP.md)
 
