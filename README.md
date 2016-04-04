@@ -13,6 +13,7 @@ Everything is customizable.
 *   work well with HTTP. So LHTTP can work with other language like php java python etc,.
 
 ### A simple [chat room demo](https://github.com/fanux/lhttp-web-demo)
+![chat-demo](https://github.com/fanux/lhttp-web-demo/blob/master/web-demo.gif)
 with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we complete a simple chat room within 40 lines code!!
 
 ###SDKs if you want to join us, contact me! My Email is fhtjob@hotmail.com
