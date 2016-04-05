@@ -17,7 +17,7 @@ Here we need combine `HeadFilterBase`, so we need't implements all the interface
 *. implements filter method
 ```go
 type HeadFilterHandler interface{
-  OnOpenFilterHandler(*WsHandler)      //when open the link, this method been called.
+  	OnOpenFilterHandler(*WsHandler)      //when open the link, this method been called.
 	BeforeRequestFilterHandle(*WsHandler) //before the service module handle, this method been called
 	AfterRequestFilterHandle(*WsHandler)  //after the service module handle,this method been called
 	OnCloseFilterHandle(*WsHandler)       //close the link, this method been called.
