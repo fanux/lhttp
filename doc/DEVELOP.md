@@ -14,6 +14,7 @@ type upstreamHeadFilter struct {
 }
 ```
 Here we need combine `HeadFilterBase`, so we need't implements all the interface witch we don't need.
+
 *. implements filter method
 ```go
 type HeadFilterHandler interface{
