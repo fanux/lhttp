@@ -120,7 +120,7 @@ func (p ChatProcessor)OnMessage(h *WsHandler) {
 ```go
 lhttp.Regist("chat",&ChatProcessor{&lhttp.BaseProcessor{}})
 ```
-** then if command is "chat" ChatProcessor will handle it ** 
+**then if command is "chat" ChatProcessor will handle it** 
 
 > define your onmessage handle
 
