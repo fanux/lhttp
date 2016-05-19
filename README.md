@@ -281,7 +281,7 @@ also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http serve can do
 message include save the record
 
 ###Multipart data
-forexample a file upload message, the multipart header record the offset of each data part, 
+for example a file upload message, the multipart header record the offset of each data part, 
 each part can has it own headers
 ```go
 LHTTP/1.0 upload\r\n
