@@ -1,0 +1,25 @@
+{
+	"ImportPath": "github.com/fanux/lhttp",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v70",
+	"Deps": [
+		{
+			"ImportPath": "github.com/nats-io/nats",
+			"Comment": "v1.1.6-150-gfc85f44",
+			"Rev": "fc85f44c1659ab6610d76fd6bd0e44ad2cadf697"
+		},
+		{
+			"ImportPath": "github.com/nats-io/nats/encoders/builtin",
+			"Comment": "v1.1.6-150-gfc85f44",
+			"Rev": "fc85f44c1659ab6610d76fd6bd0e44ad2cadf697"
+		},
+		{
+			"ImportPath": "github.com/nats-io/nuid",
+			"Rev": "a5152d67cf63cbfb5d992a395458722a45194715"
+		},
+		{
+			"ImportPath": "golang.org/x/net/websocket",
+			"Rev": "0c607074acd38c5f23d1344dfe74c977464d1257"
+		}
+	]
+}
