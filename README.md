@@ -262,7 +262,7 @@ we want save the chat record, how can we do?
     
 ```
 jack:
-MESSAGE_UPSTREAM:=
+`MESSAGE_UPSTREAM`
 ```go
 LHTTP/1.0 chat\r\n
 upstream:POST http://www.xxx.com/record\r\n
