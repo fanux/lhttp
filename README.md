@@ -1,7 +1,7 @@
 #Your star is my power!! :rocket:
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
-bulid your IM service quickly scalable without XMPP! 
+build your IM service quickly scalable without XMPP! 
 
 Everything is customizable.
 
@@ -10,7 +10,7 @@ Everything is customizable.
 *   fast, publish 10000 messages using 0.04s(single-core CPU,1G memory).
 *   support cluster.
 *   easy to customize and expansion.
-*   work well with HTTP. So LHTTP can work with other language like php java python etc,.
+*   work well with HTTP. So LHTTP can work with others language like PHP java python etc,.
 
 ### A simple [chat room demo](https://github.com/fanux/lhttp-web-demo)
 ![chat-demo](https://github.com/fanux/lhttp-web-demo/blob/master/web-demo.gif)
@@ -160,7 +160,7 @@ open  websocketServer and run:
 cd websocketServer
 go run test.go
 ```
-as we can see, both of the new header are added and new command are set by the server. 
+as we can see, both of the new headers are added and new command is set by the server. 
 If we don't set a header or command ,then they will return the same result as they 
 requested. 
 
@@ -192,7 +192,7 @@ unsubscribe:channelID\r\n
 body optional
 ```
 client2 publish a message by channelID, client1 subscribe it, so client 1 will receive the message.
-if client1 send unsubscribe channelID, he will not recevie message any more in channelID
+if client1 send unsubscribe channelID, he will not receive message any more in channelID
 
 support multiple channelID:
 ```go
@@ -202,10 +202,10 @@ subscribe:channelID1 channelID2 channelID3\r\n
 ```
 ####Using HTTP publish message! 
 lhttp support publish message by standard HTTP. 
-url: /publish . 
+URL: /publish . 
 method: POST . 
-body: use lhttp publish message as HTTP body.
-for example I wan't send a message to who subscribe channel_test by HTTP.
+body: use lhttp publishes message as HTTP body.
+for example I want send a message to who subscribe channel_test by HTTP.
 ```go
     resp,err := http.POST("https://www.yourserver.com/publish", "text/plain",
     "LHTTP/1.0 chat\r\npublish:channel_test\r\n\r\nhello channel_test guys!")
@@ -242,7 +242,7 @@ body
 
 ####This case will show you about upstream proxy:
 jack use lhttp chat with mike, lhttp is third part module, we can't modify lhttp server but
-we want save the chat record, how can we do?
+we want to save the chat record, how can we do?
 
 ```
         +----+                  +----+
@@ -277,12 +277,12 @@ subscribe:channel_mike\r\n
 \r\n
 ```
 when jack send publish message, not only mike will receive the message, the http server will
-also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http serve can do anything about
+also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http server can do anything about
 message include save the record
 
 ###Multipart data
 for example a file upload message, the multipart header record the offset of each data part, 
-each part can has it own headers
+each part can have it own headers
 ```go
 LHTTP/1.0 upload\r\n
 multipart:0 56\r\n
