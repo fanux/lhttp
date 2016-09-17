@@ -3,11 +3,11 @@ We know lhttp has some standard headers like `subscribe/publish/unsubscribe/upst
 But if you want define your own header for example `auth`,
 then you need add your own filter, this document show you `upstream` header develop.
 
-*. Add the header name in lhttpDefine.go
+* Add the header name in lhttpDefine.go
 ```go
 HEADER_KEY_UPSTREAM = "upstream"
 ```
-*. create a file named upstreamFilter.go, add filter module
+* create a file named upstreamFilter.go, add filter module
 ```go
 type upstreamHeadFilter struct {
     *HeadFilterBase
@@ -15,7 +15,7 @@ type upstreamHeadFilter struct {
 ```
 Here we need combine `HeadFilterBase`, so we need't implements all the interface witch we don't need.
 
-*. implements filter method
+* implements filter method
 ```go
 type HeadFilterHandler interface{
   	OnOpenFilterHandler(*WsHandler)      //when open the link, this method been called.
@@ -37,7 +37,7 @@ func (*upstreamHeadFilter) AfterRequestFilterHandle(ws *WsHandler) {
     //send message to upstream server
 }
 ```
-*. Regist upstream filter in headerFilter.go
+* Regist upstream filter in headerFilter.go
 ```go
 	RegistHeadFilter(&upstreamHeadFilter{})
 ```
