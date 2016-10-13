@@ -10,7 +10,7 @@ var (
 	lhttpPort = "8081"
 )
 
-//publish message to channel using http
+// Publish message to channel using http
 func Publish(channelID []string, command string, header map[string]string, body string) (err error) {
 	//HTTP Client
 	//Connect to Terminal Module

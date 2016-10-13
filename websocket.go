@@ -15,17 +15,27 @@ import (
 )
 
 const (
-	ProtocolVersionHybi13    = 13
-	ProtocolVersionHybi      = ProtocolVersionHybi13
+	// ProtocolVersionHybi13
+	ProtocolVersionHybi13 = 13
+	// ProtocolVersionHybi
+	ProtocolVersionHybi = ProtocolVersionHybi13
+	// SupportedProtocolVersion
 	SupportedProtocolVersion = "13"
 
+	// ContinuationFrame
 	ContinuationFrame = 0
-	TextFrame         = 1
-	BinaryFrame       = 2
-	CloseFrame        = 8
-	PingFrame         = 9
-	PongFrame         = 10
-	UnknownFrame      = 255
+	// TextFrame
+	TextFrame = 1
+	// BinaryFrame
+	BinaryFrame = 2
+	// CloseFrame
+	CloseFrame = 8
+	// PingFrame
+	PingFrame = 9
+	// PongFrame
+	PongFrame = 10
+	// UnknownFrame
+	UnknownFrame = 255
 )
 
 // ProtocolError represents WebSocket protocol errors.
@@ -36,6 +46,7 @@ type ProtocolError struct {
 func (err *ProtocolError) Error() string { return err.ErrorString }
 
 var (
+	// ErrBadProtocolVersion
 	ErrBadProtocolVersion   = &ProtocolError{"bad protocol version"}
 	ErrBadScheme            = &ProtocolError{"bad scheme"}
 	ErrBadStatus            = &ProtocolError{"bad status"}
@@ -217,7 +228,10 @@ func (ws *Conn) Close() error {
 	return err1
 }
 
+// IsClientConn
 func (ws *Conn) IsClientConn() bool { return ws.request == nil }
+
+// IsServerConn
 func (ws *Conn) IsServerConn() bool { return ws.request != nil }
 
 // LocalAddr returns the WebSocket Origin for the connection for client, or
