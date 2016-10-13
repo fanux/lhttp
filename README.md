@@ -1,4 +1,10 @@
 #Your star is my power!! :rocket:
+
+[![License MIT](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/fanux/lhttp)](https://goreportcard.com/report/github.com/fanux/lhttp) [![GoDoc](https://godoc.org/github.com/fanux/lhttp?status.svg)](http://godoc.org/github.com/fanux/lhttp) [![Coverage Status](https://coveralls.io/repos/fanux/lhttp/badge.svg?branch=master)](https://coveralls.io/r/fanux/lhttp?branch=master)
+
+https://goreportcard.com/badge/github.com/fanux/lhttp
+
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
 build your IM service quickly scalable without XMPP! 
