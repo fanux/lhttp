@@ -31,7 +31,7 @@ type multipartFilter struct {
 
 func splitsString(pos []int, s string) (strs []string) {
 	log.Print("pos:", pos, " body multipart string:", s)
-	for i, _ := range pos {
+	for i, j := range pos {
 		i++
 		if i >= len(pos) {
 			strs = append(strs, s[pos[i-1]:])
@@ -81,7 +81,8 @@ func initBlock(s string, m *multipartBlock) {
 func (*multipartFilter) BeforeRequestFilterHandle(ws *WsHandler) {
 	var value string
 
-	posInts := make([]int, 0)
+	var posInts []int
+	posInts = make([]int, 0)
 	if value = ws.GetHeader(HEADER_KEY_MULTIPART); value == "" {
 		log.Print("no multipart header found")
 		return
