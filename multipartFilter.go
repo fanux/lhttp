@@ -31,7 +31,7 @@ type multipartFilter struct {
 
 func splitsString(pos []int, s string) (strs []string) {
 	log.Print("pos:", pos, " body multipart string:", s)
-	for i, j := range pos {
+	for i := range pos {
 		i++
 		if i >= len(pos) {
 			strs = append(strs, s[pos[i-1]:])
