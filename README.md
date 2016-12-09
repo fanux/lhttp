@@ -2,6 +2,7 @@
 
 [![License MIT](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fanux/lhttp)](https://goreportcard.com/report/github.com/fanux/lhttp) [![GoDoc](https://godoc.org/github.com/fanux/lhttp?status.svg)](http://godoc.org/github.com/fanux/lhttp) 
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go/blob/master/README.md#networking) 
 
 ###Discribe
 lhttp is a http like protocol using websocket to provide long live, 
