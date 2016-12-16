@@ -1,2 +1,3 @@
 gnatsd &
-websocketServer
+websocketServer &
+lhttp-web-demo
