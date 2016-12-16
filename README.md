@@ -27,21 +27,6 @@ with [lhttp javascript sdk](https://github.com/fanux/lhttp-javascript-sdk) we co
 
 ###[Header filter development](https://github.com/fanux/lhttp/blob/master/doc/DEVELOP.md)
 
-### Quick Start
-Ship on docker
-```
-$ docker build -t lhttp:latest .
-$ docker run -p 9090:9090 -p 8081:8081 lhttp:latest
-```
-Open two windows in your browser, enter `http://localhost:9090`.
-
-Enjoy the chat...
-
-Alternative, pull image from docker hub.
-```
-$ docker run -p 9090:9090 -p 8081:8081 fanux/lhttp:latest
-```
-
 ####Protocol stack:
 ```go
 +--------------------+
@@ -84,6 +69,20 @@ Open anohter bash run lhttpClient, then input your command:
 ```bash
 cd bin
 ./lhttpClient
+```
+
+###Ship on docker
+```
+$ docker build -t lhttp:latest .
+$ docker run -p 9090:9090 -p 8081:8081 lhttp:latest
+```
+Open two windows in your browser, enter `http://localhost:9090`.
+
+Enjoy the chat...
+
+Alternative, pull image from docker hub.
+```
+$ docker run -p 9090:9090 -p 8081:8081 fanux/lhttp:latest
 ```
 
 ###Protocol
