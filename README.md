@@ -78,6 +78,8 @@ $ docker run -p 9090:9090 -p 8081:8081 lhttp:latest
 ```
 Open two windows in your browser, enter `http://localhost:9090`.
 
+Lhttp server port is 8081, your own websocket client can connect to `ws://localhost:8081`
+
 Enjoy the chat...
 
 Alternative, pull image from docker hub.
