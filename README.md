@@ -343,3 +343,5 @@ func (*UploadProcessor) OnMessage(ws *lhttp.WsHandler) {
 lhttp.Regist("upload", &UploadProcessor{&lhttp.BaseProcessor{}})
 ```
 
+## Partners
+[![](https://yunbi.com/logos/logo.svg)](https://yunbi.com)
