@@ -223,15 +223,15 @@ Publish("mike", "yourCommand", nil, "hello mike!")
 ```
 
 ###上游服务器
-we can use lhttp as a proxy:
+upstream首部可以让lhttp向上游的http服务器发送一条消息。
 ```go
 LHTTP/1.0 command\r\n
 upstream:POST http://www.xxx.com\r\n
 \r\n
 body
 ```
-lhttp will use hole message as http body, post to http://www.xxx.com
-if method is GET, lhttp  send http GET request **ignore lhttp message body**:
+如果是POST方法，lhttp会把整个消息体当作http的body发送给 http://www.xxx.com
+如果是GET，lhttp会忽略消息体
 
 ```go
 LHTTP/1.0 command\r\n
@@ -240,9 +240,12 @@ upstream:GET http://www.xxx.com?user=user_a&age=26\r\n
 body
 ```
 
-####This case will show you about upstream proxy:
-jack use lhttp chat with mike, lhttp is third part module, we can't modify lhttp server but
-we want to save the chat record, how can we do?
+#### upstream有什么用：
+如我们不想改动lhttp的代码，但是想存储聊天记录。
+
+通过upstream可以实现很好的解耦：
+
+并且http server可以用其它语言实现.
 
 ```
         +----+                  +----+
@@ -262,7 +265,6 @@ we want to save the chat record, how can we do?
     
 ```
 jack:
-`MESSAGE_UPSTREAM`
 ```go
 LHTTP/1.0 chat\r\n
 upstream:POST http://www.xxx.com/record\r\n
@@ -276,13 +278,14 @@ LHTTP/1.0 chat\r\n
 subscribe:channel_mike\r\n
 \r\n
 ```
-when jack send publish message, not only mike will receive the message, the http server will
-also receive it. witch http body is:```MESSAGE_UPSTREAM```, so http server can do anything about
-message include save the record
+这样jack publish消息时不仅mike可以收到，后端的upstream server也可以收到，我们可以在后端服务器中处理消息存储的逻辑，如将消息
 
-###Multipart data
-for example a file upload message, the multipart header record the offset of each data part, 
-each part can have it own headers
+存储到redis的有序集合中。
+
+
+### 分块消息
+试想一下，一条消息中既有图片也有文字还有语音怎么办？ lhttp的multipart首部解决这个问题
+
 ```go
 LHTTP/1.0 upload\r\n
 multipart:0 56\r\n
@@ -300,15 +303,14 @@ content-type:text/json\r\n\r\n{filename:file.txt,fileLen:5}content-type:text/pla
 |<---------------------first part------------------------->|<---------second part------------>|
 0                                                          56                           
 ```
-why not boundary but use offset? if use boundary lhttp need ergodic hole message, that behaviour 
-is poor efficiency. instead we use offset to cut message 
+http中是使用boundry实现的，lhttp使用偏移量标识分块，这样效率更高，不需要遍历整个消息体。
 
-####How to get multipart data
-for example this is client message.
+#### 如何获取分块消息
+如客户端消息如下：
 ```go
 LHTTP/1.0 upload\r\nmultipart:0 14\r\n\r\nk1:v1\r\n\r\nbody1k2:v2\r\n\r\nbody2
 ```
-server code:
+服务端代码，消息存在链表中：
 ```go
 type UploadProcessor struct {
 	*lhttp.BaseProcessor
