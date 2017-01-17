@@ -10,6 +10,8 @@ build your IM service quickly scalable without XMPP!
 
 Everything is customizable.
 
+###[简体中文](https://github.com/fanux/lhttp/blob/master/doc/README_zh.md)
+
 ###Features
 *   simple easy but powerful!
 *   fast, publish 10000 messages using 0.04s(single-core CPU,1G memory).
