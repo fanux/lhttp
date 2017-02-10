@@ -340,7 +340,7 @@ func (*UploadProcessor) OnMessage(ws *lhttp.WsHandler) {
 	}
 }
 
-//don't forget to tegist your command processor
+//don't forget to regist your command processor
 
 lhttp.Regist("upload", &UploadProcessor{&lhttp.BaseProcessor{}})
 ```
