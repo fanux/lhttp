@@ -1,4 +1,4 @@
-###LHTTP header filter develop
+### LHTTP header filter develop
 We know lhttp has some standard headers like subscribe/publish/unsubscribe/upstream ... But if you want to define your own header for example auth, then you need to add your own filter, this document shows you upstream header develop
 
 * Add the header name in lhttpDefine.go
