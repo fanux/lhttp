@@ -1,4 +1,4 @@
-###LHTTP过滤模块开发
+### LHTTP过滤模块开发
 所谓过滤模块就是处理特定的LHTTP header的模块。
 此处以upstream过滤模块为事例描述一个过滤模块开发的过程。
 1. 在lhttpDefine.go文件中定义header名称
