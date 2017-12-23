@@ -93,6 +93,11 @@ type WsHandler struct {
 	multiparts *multipartBlock
 }
 
+func (req *WsHandler) reset() {
+	req.resp = WsMessage{command: "", headers: nil, body: ""}
+}
+
+
 func (req *WsHandler) GetMultipart() *multipartBlock {
 	return req.multiparts
 }
@@ -109,6 +114,12 @@ func (req *WsHandler) SetCommand(s string) {
 func (req *WsHandler) GetCommand() string {
 	return req.message.command
 }
+
+
+func (req *WsHandler) SetHeader(hkey ,hvalue string) {
+	req.message.headers[hkey] = hvalue
+}
+
 func (req *WsHandler) GetHeader(hkey string) string {
 	if value, ok := req.message.headers[hkey]; ok {
 		return value
@@ -162,7 +173,7 @@ func (req *WsHandler) Send(body string) {
 
 	req.resp.message = resp
 
-	//log.Print("send message:", string(req.message.message))
+	log.Print("send message:", string(req.message.message))
 
 	Message.Send(req.conn, req.resp.message)
 
@@ -197,7 +208,7 @@ func StartServer(ws *Conn) {
 	for {
 		var data string
 		err := Message.Receive(ws, &data)
-		//log.Print("receive message:", string(data))
+		log.Print("receive message:", string(data))
 		if err != nil {
 			break
 		}
@@ -215,6 +226,7 @@ func StartServer(ws *Conn) {
 		}
 
 		wsHandler.message = buildMessage(data)
+		wsHandler.reset()
 
 		var e *list.Element
 		//head filter before process message
@@ -226,7 +238,7 @@ func StartServer(ws *Conn) {
 		if wsHandler.callbacks == nil {
 			wsHandler.callbacks = &BaseProcessor{}
 		}
-		//log.Print("callbacks:", wsHandler.callbacks.OnMessage)
+		// log.Print("callbacks:", wsHandler.callbacks.OnMessage)
 		//just call once
 		if openFlag == 0 {
 			for e = onOpenFilterList.Front(); e != nil; e = e.Next() {

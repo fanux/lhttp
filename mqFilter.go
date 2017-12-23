@@ -29,7 +29,6 @@ func (*mqHeadFilter) AfterRequestFilterHandle(ws *WsHandler) {
 			ws.setResponse()
 			ws.resp.serializeMessage()
 			mq.Publish(c, ws.resp.message)
-
 			log.Print("publish channel: ", c, "message:", ws.resp.message)
 		}
 	}
