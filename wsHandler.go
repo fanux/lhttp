@@ -2,7 +2,7 @@ package lhttp
 
 import (
 	"container/list"
-	"log"
+	// "log"
 	"net/url"
 	"strings"
 )
@@ -59,7 +59,7 @@ func buildMessage(data string) *WsMessage {
 			k = j + 2
 
 			message.headers[key] = value
-			log.Print("parse head key:", key, " value:", value)
+			// log.Print("parse head key:", key, " value:", value)
 			key = ""
 		}
 		if headers[k:k+2] == CRLF {
@@ -79,6 +79,9 @@ type WsHandler struct {
 
 	//websocket connection
 	conn *Conn
+
+	// nats conn
+	subscribe_nats_conn map[string]interface{}
 
 	//receive message
 	message *WsMessage
@@ -173,7 +176,7 @@ func (req *WsHandler) Send(body string) {
 
 	req.resp.message = resp
 
-	log.Print("send message:", string(req.message.message))
+	// log.Print("send message:", string(req.message.message))
 
 	Message.Send(req.conn, req.resp.message)
 
@@ -190,13 +193,13 @@ type BaseProcessor struct {
 }
 
 func (*BaseProcessor) OnOpen(*WsHandler) {
-	log.Print("base on open")
+	// log.Print("base on open")
 }
 func (*BaseProcessor) OnMessage(*WsHandler) {
-	log.Print("base on message")
+	// log.Print("base on message")
 }
 func (*BaseProcessor) OnClose(*WsHandler) {
-	log.Print("base on close")
+	// log.Print("base on close")
 }
 
 func StartServer(ws *Conn) {
@@ -204,24 +207,25 @@ func StartServer(ws *Conn) {
 
 	//init WsHandler,set connection and connsetid
 	wsHandler := &WsHandler{conn: ws}
+	wsHandler.subscribe_nats_conn = make(map[string]interface{}, subscribeMax)
 
 	for {
 		var data string
 		err := Message.Receive(ws, &data)
-		log.Print("receive message:", string(data))
+		// log.Print("receive message:", string(data))
 		if err != nil {
 			break
 		}
 
 		if len(data) <= protocolLength {
 			//TODO how to provide other protocol
-			log.Print("TODO provide other protocol")
+			// log.Print("TODO provide other protocol")
 			continue
 		}
 
 		if data[:protocolLength] != protocolNameWithVersion {
 			//TODO how to provide other protocol
-			log.Print("TODO provide other protocol")
+			// log.Print("TODO provide other protocol")
 			continue
 		}
 
