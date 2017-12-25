@@ -24,6 +24,7 @@ var (
 	protocolName            = "LHTTP"
 	protocolNameWithVersion = "LHTTP/1.0"
 	protocolLength          = 9
+	MaxLength				= 40960
 )
 
 var (
