@@ -29,9 +29,9 @@ func (mq *Mq) Unsubscribe(sub *nats.Subscription) error {
 }
 */
 
-func (mq *Mq) Unsubscribe(channel string) error {
-	sub, _ := mq.Subscribe(channel, nil)
-	return sub.Unsubscribe()
+func (mq *Mq) Unsubscribe(handle interface{}) error {
+	c :=handle.(*nats.Subscription)
+	return c.Unsubscribe()
 }
 
 var mq Mq

@@ -3,7 +3,7 @@ package lhttp
 
 import (
 	"container/list"
-	"log"
+	// "log"
 )
 
 var (
@@ -30,19 +30,19 @@ type YourFilter struct {
 type HeadFilterBase struct{}
 
 func (*HeadFilterBase) BeforeRequestFilterHandle(ws *WsHandler) {
-	log.Print("head base filter before request")
+	// log.Print("head base filter before request")
 }
 
 func (*HeadFilterBase) AfterRequestFilterHandle(ws *WsHandler) {
-	log.Print("head base filter after request")
+	// log.Print("head base filter after request")
 }
 
 func (*HeadFilterBase) OnOpenFilterHandle(ws *WsHandler) {
-	log.Print("head base filter on open")
+	// log.Print("head base filter on open")
 }
 
 func (*HeadFilterBase) OnCloseFilterHandle(ws *WsHandler) {
-	log.Print("head base filter on close")
+	// log.Print("head base filter on close")
 }
 
 func RegistHeadFilter(h HeadFilterHandler) {
@@ -58,8 +58,8 @@ func init() {
 	afterRequestFilterList = list.New()
 	onCloseFilterList = list.New()
 
-	RegistHeadFilter(&HeadFilterBase{})
+	// RegistHeadFilter(&HeadFilterBase{})
 	RegistHeadFilter(&mqHeadFilter{})
-	RegistHeadFilter(&upstreamHeadFilter{})
-	RegistHeadFilter(&multipartFilter{})
+	// RegistHeadFilter(&upstreamHeadFilter{})
+	// RegistHeadFilter(&multipartFilter{})
 }

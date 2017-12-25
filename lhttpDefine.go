@@ -19,6 +19,7 @@ var (
 var (
 	//headers max num not size
 	headerMax               = 20
+	subscribeMax            = 40
 	version                 = "1.0"
 	protocolName            = "LHTTP"
 	protocolNameWithVersion = "LHTTP/1.0"
