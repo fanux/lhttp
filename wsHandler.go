@@ -216,12 +216,20 @@ func StartServer(ws *Conn) {
 		if err != nil {
 			break
 		}
-
-		if len(data) <= protocolLength {
+		l:=len(data)
+		if l <= protocolLength {
 			//TODO how to provide other protocol
 			// log.Print("TODO provide other protocol")
 			continue
 		}
+
+		l:=len(data)
+		if l > MaxLength {
+			//TODO how to provide other protocol
+			// log.Print("TODO provide other protocol")
+			continue
+		}
+
 
 		if data[:protocolLength] != protocolNameWithVersion {
 			//TODO how to provide other protocol

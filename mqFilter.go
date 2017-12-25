@@ -19,8 +19,9 @@ func (*mqHeadFilter) AfterRequestFilterHandle(ws *WsHandler) {
 		channels = strings.Split(value, " ")
 		for _, c := range channels {
 			if conn,err:=mq.Subscribe(c, ws.subscribeCallback); nil == err{
-				log.Println(conn,err)
 				ws.subscribe_nats_conn[c] = conn
+			}else{
+				log.Println("Subscribe Error",err)
 			}
 			// log.Print("subscribe channel: ", c)
 		}
