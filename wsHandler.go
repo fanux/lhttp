@@ -223,7 +223,7 @@ func StartServer(ws *Conn) {
 			continue
 		}
 
-		l:=len(data)
+		l=len(data)
 		if l > MaxLength {
 			//TODO how to provide other protocol
 			// log.Print("TODO provide other protocol")
