@@ -15,7 +15,7 @@ type upstreamHeadFilter struct {
 func (*upstreamHeadFilter) AfterRequestFilterHandle(ws *WsHandler) {
 	var value string
 	if value = ws.GetHeader(HEADER_KEY_UPSTREAM); value == "" {
-		log.Print("no upstream header found:", ws.message.message, ws.message.headers)
+		// log.Print("no upstream header found:", ws.message.message, ws.message.headers)
 		return
 	}
 
@@ -58,5 +58,5 @@ func (*upstreamHeadFilter) AfterRequestFilterHandle(ws *WsHandler) {
 	if err != nil {
 		return
 	}
-	log.Print(string(body))
+	log.Print("upstream",string(body))
 }
