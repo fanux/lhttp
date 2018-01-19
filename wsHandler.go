@@ -50,11 +50,12 @@ func buildMessage(data string) *WsMessage {
 	var key string
 	var value string
 	//traverse once
+	length := len(headers)
 	for j, ch := range headers {
 		if ch == ':' && key == "" {
 			key = headers[k:j]
 			k = j + 1
-		} else if headers[j:j+2] == CRLF {
+		} else if length > j+1 && headers[j:j+2] == CRLF {
 			value = headers[k:j]
 			k = j + 2
 
@@ -62,7 +63,7 @@ func buildMessage(data string) *WsMessage {
 			// log.Print("parse head key:", key, " value:", value)
 			key = ""
 		}
-		if headers[k:k+2] == CRLF {
+		if length > k+1 && headers[k:k+2] == CRLF {
 			k += 2
 			break
 		}
