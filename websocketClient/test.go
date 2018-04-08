@@ -27,7 +27,7 @@ func sendSubscribe(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 suubpub\r\nsubscribe:cam_123" + "\r\n\r\n"
+	msg := "LHTTP/1.0 subpub\r\nsubscribe:camera_123" + "\r\n\r\n"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 func sendUnsubscribe(c *websocket.Conn) {
@@ -36,7 +36,7 @@ func sendUnsubscribe(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 suubpub\r\nunsubscribe:camera_123" + "\r\n\r\n"
+	msg := "LHTTP/1.0 subpub\r\nunsubscribe:camera_123" + "\r\n\r\n"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 func sendPublish(c *websocket.Conn) {
@@ -45,7 +45,7 @@ func sendPublish(c *websocket.Conn) {
 		in := make([]byte, 1024)
 		os.Stdin.Read(in)
 	*/
-	msg := "LHTTP/1.0 suubpub\r\npublish:camera_123" + "\r\n\r\nhello world"
+	msg := "LHTTP/1.0 subpub\r\npublish:camera_123" + "\r\n\r\nhello world"
 	c.WriteMessage(websocket.TextMessage, []byte(msg))
 }
 
