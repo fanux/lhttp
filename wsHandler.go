@@ -95,6 +95,9 @@ type WsHandler struct {
 
 	//save multipars datas, it is a list
 	multiparts *multipartBlock
+
+	UserData interface{}
+
 }
 
 func (req *WsHandler) reset() {
@@ -122,6 +125,10 @@ func (req *WsHandler) GetCommand() string {
 
 func (req *WsHandler) SetHeader(hkey ,hvalue string) {
 	req.message.headers[hkey] = hvalue
+}
+
+func (req *WsHandler) SetMessage(body string) {
+	req.message.body=body
 }
 
 func (req *WsHandler) GetHeader(hkey string) string {
@@ -287,3 +294,4 @@ func StartServer(ws *Conn) {
 		ws.Close()
 	}()
 }
+
